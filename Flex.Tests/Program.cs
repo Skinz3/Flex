@@ -10,13 +10,11 @@ namespace Flex.Tests
     {
         static void Main(string[] args)
         {
-            MySqlDatabase database = new MySqlDatabase("movies");
+            MySqlDatabase database = new MySqlDatabase("gla");
 
             Table<MovieRecord> table = database.GetTable<MovieRecord>();
 
-            var results = table.Select();
-
-
+            var results = table.Count();
 
         }
     }

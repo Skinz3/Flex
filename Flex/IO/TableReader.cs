@@ -12,7 +12,7 @@ namespace Flex.IO
 {
     public class TableReader<T> where T : IEntity
     {
-        private MySqlDatabase Database
+        private Table<T> Table
         {
             get;
             set;
@@ -22,20 +22,17 @@ namespace Flex.IO
             get;
             set;
         }
-        private PropertyInfo[] Properties
+
+        public TableReader(Table<T> table)
         {
-            get;
-            set;
-        }
-        public TableReader(MySqlDatabase database)
-        {
-            this.Database = database;
+            this.Table = table;
             this.Type = typeof(T); // no more computation of typeof(T)
-            this.Properties = Type.GetProperties().Where(x => x.GetCustomAttribute<TransientAttribute>() == null).ToArray();
         }
+
+      
         public IEnumerable<T> Query(string query)
         {
-            MySqlConnection connection = Database.UseConnection();
+            MySqlConnection connection = Table.Database.UseConnection();
 
             using (var command = new MySqlCommand(query, connection))
             {
@@ -43,24 +40,24 @@ namespace Flex.IO
 
                 MySqlDataReader reader = command.ExecuteReader(); // ExecuteReader() should be called once?
 
-                if (reader.FieldCount != Properties.Length)
+                if (reader.FieldCount != Table.Properties.Length)
                 {
                     throw new InvalidOperationException("Inccorect mapping.");
                 }
                 while (reader.Read())
                 {
-                    var obj = new object[this.Properties.Length];
+                    var obj = new object[Table.Properties.Length];
 
                     for (var i = 0; i < reader.FieldCount; i++) // O(2n) complexity necessary ? only one for loop ?
                     {
-                        obj[i] = ConvertProperty(reader[i], Properties[i]);
+                        obj[i] = ConvertProperty(reader[i], Table.Properties[i]);
                     }
 
                     T entity = (T)Activator.CreateInstance(Type);
 
-                    for (int i = 0; i < Properties.Length; i++)
+                    for (int i = 0; i < Table.Properties.Length; i++)
                     {
-                        Properties[i].SetValue(entity, obj[i]);
+                       Table.Properties[i].SetValue(entity, obj[i]);
                     }
 
                     results.Add(entity);

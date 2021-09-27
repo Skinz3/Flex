@@ -8,13 +8,14 @@ namespace Flex.MySQL
     {
         public const string CreateTable = "CREATE TABLE if not exists {0} ({1})";
 
+        public const string Count = "SELECT COUNT(*) FROM `{0}`";
+
         public const string DROP_TABLE = "DROP TABLE IF EXISTS {0}";
 
         public const string DELETE_TABLE = "DELETE FROM {0}";
 
         public const string Select = "SELECT * FROM `{0}`";
 
-        public const string COUNT = "SELECT COUNT(*) FROM `{0}`";
 
         public const string INSERT = "INSERT INTO `{0}` VALUES {1}";
 
