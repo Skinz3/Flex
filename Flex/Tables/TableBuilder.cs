@@ -14,10 +14,8 @@ namespace Flex.Tables
         {
             EntityAttribute entityAttribute = entityType.GetCustomAttribute<EntityAttribute>();
 
-            PropertyInfo[] properties = entityType.GetProperties().Where(x => x.GetCustomAttribute<TransientAttribute>() == null).ToArray();
-
             Type genericType = typeof(Table<>).MakeGenericType(new Type[] { entityType });
-            ITable table = (ITable)Activator.CreateInstance(genericType, new object[] { database, entityAttribute.TableName, properties }); ;
+            ITable table = (ITable)Activator.CreateInstance(genericType, new object[] { database, entityAttribute.TableName }); ;
 
             return table;
         }

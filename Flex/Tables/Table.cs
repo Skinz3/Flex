@@ -1,4 +1,6 @@
 ﻿using Flex.Expressions;
+using Flex.IO;
+using Flex.MySQL;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -15,21 +17,21 @@ namespace Flex.Entities
             private set;
         }
 
-        private PropertyInfo[] Properties
-        {
-            get;
-            set;
-        }
         private MySqlDatabase Database
         {
             get;
             set;
         }
-        public Table(MySqlDatabase database, string tableName, PropertyInfo[] properties)
+        private TableReader<T> Reader
+        {
+            get;
+            set;
+        }
+        public Table(MySqlDatabase database, string tableName)
         {
             this.Database = database;
+            this.Reader = new TableReader<T>(database);
             this.Name = tableName;
-            this.Properties = properties;
         }
 
         // DatabaseReader
@@ -52,7 +54,7 @@ namespace Flex.Entities
         }
         public IEnumerable<T> Select()
         {
-            return null;
+            return Reader.Query(string.Format(QueryConstants.Select, Name));
         }
         public IEnumerable<T> Select(Func<T, bool> func)
         {

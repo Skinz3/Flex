@@ -14,7 +14,7 @@ namespace Flex.Tests
 
             Table<MovieRecord> table = database.GetTable<MovieRecord>();
 
-            table.Select(x => x.Name == "jean");
+            var results = table.Select();
 
 
 

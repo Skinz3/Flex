@@ -12,7 +12,7 @@ namespace Flex.MySQL
 
         public const string DELETE_TABLE = "DELETE FROM {0}";
 
-        public const string SELECT = "SELECT * FROM `{0}`";
+        public const string Select = "SELECT * FROM `{0}`";
 
         public const string COUNT = "SELECT COUNT(*) FROM `{0}`";
 
