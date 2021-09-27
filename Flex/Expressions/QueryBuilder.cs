@@ -205,7 +205,6 @@ namespace Flex.Expressions
             sb.Append(")");
             return b;
         }
-
         protected override Expression VisitConstant(ConstantExpression c)
         {
             IQueryable q = c.Value as IQueryable;
@@ -268,7 +267,6 @@ namespace Flex.Expressions
             LambdaExpression lambdaExpression = (LambdaExpression)unary.Operand;
 
             /*   lambdaExpression = (LambdaExpression)Evaluator.PartialEval(lambdaExpression);
-
                MemberExpression body = lambdaExpression.Body as MemberExpression;
                if (body != null)
                {
@@ -280,7 +278,6 @@ namespace Flex.Expressions
                    {
                        _orderBy = string.Format("{0}, {1} {2}", _orderBy, body.Member.Name, order);
                    }
-
                    return true;
                }
             */

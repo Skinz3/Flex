@@ -2,20 +2,21 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Flex.MySQL
+namespace Flex.SQL
 {
-    class QueryConstants
+    class SQLConstants
     {
         public const string CreateTable = "CREATE TABLE if not exists {0} ({1})";
 
         public const string Count = "SELECT COUNT(*) FROM `{0}`";
 
-        public const string DROP_TABLE = "DROP TABLE IF EXISTS {0}";
-
-        public const string DELETE_TABLE = "DELETE FROM {0}";
-
         public const string Select = "SELECT * FROM `{0}`";
 
+        public const string SelectWhere = "SELECT * from `{0}` where `{1}`";
+
+        public const string Drop = "DROP TABLE IF EXISTS {0}";
+
+        public const string Delete = "DELETE FROM {0}";
 
         public const string INSERT = "INSERT INTO `{0}` VALUES {1}";
 

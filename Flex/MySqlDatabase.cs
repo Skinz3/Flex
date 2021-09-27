@@ -1,6 +1,6 @@
-﻿using Flex.Entities;
+﻿using Flex.Attributes;
+using Flex.Entities;
 using Flex.Extensions;
-using Flex.Tables;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -51,9 +51,19 @@ namespace Flex
             var tableTypes = EntitiesAssembly.GetTypes().Where(x => x.HasInterface<IEntity>()).ToArray();
             foreach (var type in tableTypes)
             {
-                ITable table = TableBuilder.Build(this, type);
+                EntityAttribute entityAttribute = type.GetCustomAttribute<EntityAttribute>();
+                Type genericType = typeof(Table<>).MakeGenericType(new Type[] { type });
+                ITable table = (ITable)Activator.CreateInstance(genericType, new object[] { this, entityAttribute.TableName });
+
                 Tables.Add(type, table);
             }
+        }
+
+        public void Drop<T>() where T : IEntity
+        {
+            var table = GetTable<T>();
+            table.Drop();
+            Tables.Remove(typeof(T));
         }
 
         public Table<T> GetTable<T>() where T : IEntity
@@ -64,8 +74,7 @@ namespace Flex
         {
             return Tables.Values;
         }
-
-
+       
         internal MySqlConnection UseConnection()
         {
             if (!MySqlConnection.Ping())

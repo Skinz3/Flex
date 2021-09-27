@@ -2,6 +2,7 @@
 using Flex.Expressions;
 using Flex.Extensions;
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace Flex.Tests
@@ -14,7 +15,7 @@ namespace Flex.Tests
 
             Table<MovieRecord> table = database.GetTable<MovieRecord>();
 
-            var results = table.Count();
+            table.DeleteAll();
 
         }
     }

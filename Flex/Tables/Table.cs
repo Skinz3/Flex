@@ -1,7 +1,8 @@
 ﻿using Flex.Attributes;
 using Flex.Expressions;
+using Flex.Extensions;
 using Flex.IO;
-using Flex.MySQL;
+using Flex.SQL;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,11 @@ namespace Flex.Entities
             get;
             private set;
         }
+        internal PropertyInfo PrimaryProperty
+        {
+            get;
+            private set;
+        }
         internal PropertyInfo[] Properties
         {
             get;
@@ -36,17 +42,21 @@ namespace Flex.Entities
             get;
             set;
         }
+        private TableWriter<T> Writer
+        {
+            get;
+            set;
+        }
         public Table(MySqlDatabase database, string tableName)
         {
             this.Database = database;
             this.Reader = new TableReader<T>(this);
             this.Name = tableName;
-            this.Properties = typeof(T).GetProperties().Where(x => x.GetCustomAttribute<TransientAttribute>() == null).ToArray();
+            this.Properties = typeof(T).GetProperties().Where(x => !x.HasAttribute<TransientAttribute>()).ToArray();
+            this.PrimaryProperty = Properties.FirstOrDefault(x => x.HasAttribute<PrimaryAttribute>());
             this.Create();
         }
 
-        // DatabaseReader
-        // DatabaseWritter
         public void Insert(T entity)
         {
 
@@ -59,27 +69,25 @@ namespace Flex.Entities
         {
 
         }
-        public void DeleteAll()
+        public int DeleteAll()
         {
-
+            return NonQuery(string.Format(SQLConstants.Delete, Name));
         }
+
+        public void Drop()
+        {
+            NonQuery(string.Format(SQLConstants.Drop, Name));
+        }
+
         public IEnumerable<T> Select()
         {
-            return Reader.Query(string.Format(QueryConstants.Select, Name));
+            return Reader.Query(string.Format(SQLConstants.Select, Name));
         }
-        public IEnumerable<T> Select(Func<T, bool> func)
+        public IEnumerable<T> Select(Expression<Func<T, bool>> expression)
         {
-            Expression<Func<T, bool>> expr = (entity) => func(entity);
-            QueryBuilder b = new QueryBuilder();
-            b.Visit(expr);
-
-            var test = b.WhereClause;
-
-            return null;
-        }
-        public IEntity SelectOne(Predicate<T> predicate)
-        {
-            return null;
+            QueryBuilder builder = new QueryBuilder();
+            builder.Translate(expression);
+            return Reader.Query(string.Format(SQLConstants.SelectWhere, Name, builder.WhereClause));
         }
 
         public int NonQuery(string query)
@@ -91,35 +99,47 @@ namespace Flex.Entities
                 return command.ExecuteNonQuery();
             }
         }
-        public T Scalar<T>(string query)
+
+        public TResult Scalar<TResult>(string query)
         {
             MySqlConnection connection = Database.UseConnection();
 
             using (var command = new MySqlCommand(query, connection))
             {
-                return (T)command.ExecuteScalar();
+                return (TResult)command.ExecuteScalar();
             }
         }
 
         private void Create()
         {
-            string str = string.Empty;
+            StringBuilder sb = new StringBuilder();
 
-            foreach (var property in this.Properties)
+            for (int i = 0; i < Properties.Length; i++)
             {
-                string pType = "varchar(255)";
-                str += property.Name + " " + pType + ",";
+                PropertyInfo property = Properties[i];
+                sb.Append(property.Name);
+                sb.Append(" ");
+                sb.Append(TypeMapping.GetSQLType(property));
+
+                if (i < Properties.Length - 1 || PrimaryProperty != null)
+                {
+                    sb.Append(',');
+                }
+
             }
 
-            str = str.Remove(str.Length - 1, 1);
+            if (PrimaryProperty != null)
+            {
+                sb.Append("PRIMARY KEY(" + PrimaryProperty.Name + ")");
 
+            }
 
-            NonQuery(string.Format(QueryConstants.CreateTable, Name, str));
+            NonQuery(string.Format(SQLConstants.CreateTable, Name, sb.ToString()));
         }
 
         public long Count()
         {
-            return Scalar<long>(string.Format(QueryConstants.Count, Name));
+            return Scalar<long>(string.Format(SQLConstants.Count, Name));
         }
     }
 }
