@@ -51,7 +51,7 @@ namespace Flex
             var tableTypes = EntitiesAssembly.GetTypes().Where(x => x.HasInterface<IEntity>()).ToArray();
             foreach (var type in tableTypes)
             {
-                EntityAttribute entityAttribute = type.GetCustomAttribute<EntityAttribute>();
+                TableAttribute entityAttribute = type.GetCustomAttribute<TableAttribute>();
                 Type genericType = typeof(Table<>).MakeGenericType(new Type[] { type });
                 ITable table = (ITable)Activator.CreateInstance(genericType, new object[] { this, entityAttribute.TableName });
 

@@ -4,14 +4,14 @@ using System.Text;
 
 namespace Flex.Attributes
 {
-    public class EntityAttribute : Attribute
+    public class TableAttribute : Attribute
     {
         public string TableName
         {
             get;
             private set;
         }
-        public EntityAttribute(string tableName)
+        public TableAttribute(string tableName)
         {
             this.TableName = tableName;
         }
