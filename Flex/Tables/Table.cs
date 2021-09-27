@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Flex.Expressions;
+using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 
@@ -32,15 +34,15 @@ namespace Flex.Entities
 
         // DatabaseReader
         // DatabaseWritter
-        public void Insert(IEntity entity)
+        public void Insert(T entity)
         {
 
         }
-        public void Update(IEntity entity)
+        public void Update(T entity)
         {
 
         }
-        public void Delete(IEntity entity)
+        public void Delete(T entity)
         {
 
         }
@@ -48,15 +50,21 @@ namespace Flex.Entities
         {
 
         }
-        public IEnumerable<IEntity> Select()
+        public IEnumerable<T> Select()
         {
             return null;
         }
-        public IEnumerable<IEntity> Select(Predicate<IEntity> entity)
+        public IEnumerable<T> Select(Func<T, bool> func)
         {
+            Expression<Func<T, bool>> expr = (entity) => func(entity);
+            QueryBuilder b = new QueryBuilder();
+            b.Visit(expr);
+
+            var test = b.WhereClause;
+
             return null;
         }
-        public IEntity SelectOne(Predicate<IEntity> predicate)
+        public IEntity SelectOne(Predicate<T> predicate)
         {
             return null;
         }

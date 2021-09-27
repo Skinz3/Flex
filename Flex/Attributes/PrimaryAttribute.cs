@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Flex.Entities
+namespace Flex.Attributes
 {
-    public interface IEntity
+    public class PrimaryAttribute : Attribute
     {
 
     }

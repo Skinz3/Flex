@@ -1,6 +1,5 @@
 ﻿using Flex.Entities;
 using Flex.Extensions;
-using Flex.Log;
 using Flex.Tables;
 using MySql.Data.MySqlClient;
 using System;

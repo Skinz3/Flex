@@ -1,7 +1,8 @@
 ﻿using Flex.Entities;
+using Flex.Expressions;
 using Flex.Extensions;
-using Microsoft.Extensions.Logging;
 using System;
+using System.Linq.Expressions;
 
 namespace Flex.Tests
 {
@@ -12,6 +13,10 @@ namespace Flex.Tests
             MySqlDatabase database = new MySqlDatabase("movies");
 
             Table<MovieRecord> table = database.GetTable<MovieRecord>();
+
+            table.Select(x => x.Name == "jean");
+
+
 
         }
     }

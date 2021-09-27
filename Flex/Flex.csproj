@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <Folder Include="IO\" />
-    <Folder Include="Log\" />
   </ItemGroup>
 
 </Project>
