@@ -123,7 +123,7 @@ database.EndTransaction(); // <--- execute queries
 
 ```
 
-# Dependencies
+# Package Dependencies
 
  | Name        | Version           |
 | ------------- |:-------------:|
