@@ -70,9 +70,9 @@ Flex is a lightweight object-relational mapping (ORM) product for the Microsoft 
 
   long count = table.Count();
 
-  IEnumerable<User> Users = table.Select().Execute(); 
+  IEnumerable<User> Users = table.Select();
 
-  IEnumerable<User> users = table.Select(x=> x.Username == "John Doe").GroupBy(x => x.Ip).Execute(); // <--- Dynamic query builder
+  IEnumerable<User> users = table.Select(x=> x.Username == "John Doe").GroupBy(x => x.Ip); // <--- Dynamic query builder
 
 ```
 
