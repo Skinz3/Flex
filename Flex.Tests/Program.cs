@@ -11,7 +11,7 @@ namespace Flex.Tests
     {
         static void Main(string[] args)
         {
-            MySqlDatabase database = new MySqlDatabase("dsb");
+            Database database = new SQLiteDatabase("file.sqlite");
             database.CreateAllTables();
 
             Table<MovieRecord> table = database.GetTable<MovieRecord>();

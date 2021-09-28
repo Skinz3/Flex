@@ -3,6 +3,7 @@ using Flex.Entities;
 using Flex.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -60,6 +61,8 @@ namespace Flex
 
         public abstract T Scalar<T>(string query);
 
+        public abstract DbDataReader ExecuteReader(string query);
+
         public Table<T> GetTable<T>() where T : IEntity
         {
             return (Table<T>)Tables[typeof(T)];
@@ -68,5 +71,7 @@ namespace Flex
         {
             return Tables.Values;
         }
+
+     
     }
 }

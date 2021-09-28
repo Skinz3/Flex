@@ -1,0 +1,8 @@
+﻿Stoquage des queries
+
+
+-Database.StartTransaction();
+-Database.EndTransaction();
+
+Merge d'un type de base de donnée a une autre (et surtout d'un sgbd a un autre!). TransfertDatabase(Database database) un truc dans le genre
+

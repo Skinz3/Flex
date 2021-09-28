@@ -4,6 +4,7 @@ using Flex.Extensions;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -45,9 +46,7 @@ namespace Flex
 
         public override int NonQuery(string query)
         {
-            MySqlConnection connection = UseConnection();
-
-            using (var command = new MySqlCommand(query, connection))
+            using (var command = new MySqlCommand(query, UseConnection()))
             {
                 return command.ExecuteNonQuery();
             }
@@ -55,11 +54,20 @@ namespace Flex
 
         public override T Scalar<T>(string query)
         {
-            MySqlConnection connection = UseConnection();
-
-            using (var command = new MySqlCommand(query, connection))
+            using (var command = new MySqlCommand(query, UseConnection()))
             {
                 return (T)command.ExecuteScalar();
+            }
+        }
+
+        public override DbDataReader ExecuteReader(string query)
+        {
+            using (var command = new MySqlCommand(query, UseConnection()))
+            {
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    return reader;
+                }
             }
         }
     }

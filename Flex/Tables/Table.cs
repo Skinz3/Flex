@@ -89,10 +89,6 @@ namespace Flex.Entities
             return Reader.Query(string.Format(SQLConstants.SelectWhere, Name, builder.WhereClause));
         }
 
-        
-
-       
-
         public void Create()
         {
             StringBuilder sb = new StringBuilder();
