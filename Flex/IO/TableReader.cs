@@ -1,5 +1,6 @@
 ﻿using Flex.Attributes;
 using Flex.Entities;
+using Flex.Exceptions;
 using Flex.Extensions;
 using MySql.Data.MySqlClient;
 using System;
@@ -37,7 +38,7 @@ namespace Flex.IO
 
                     if (reader.FieldCount != Table.Properties.Length)
                     {
-                        throw new InvalidOperationException("The mapping of table '" + Table.Name + "' is not consistent with the SQL structure.");
+                        throw new InvalidMappingException("The mapping of table '" + Table.Name + "' is not consistent with the SQL structure.");
                     }
                     while (reader.Read())
                     {

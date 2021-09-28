@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Flex.Tests
 {
-    [Table("movies")]
+   // [Table("movies")]
     public class MovieRecord : IEntity
     {
         [Primary]

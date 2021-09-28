@@ -1,5 +1,6 @@
 ﻿using Flex.Attributes;
 using Flex.Entities;
+using Flex.Exceptions;
 using Flex.Extensions;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,7 @@ namespace Flex
             get;
             private set;
         }
-            
+
         public abstract char ParameterPrefix
         {
             get;
@@ -42,6 +43,12 @@ namespace Flex
             foreach (var type in tableTypes)
             {
                 TableAttribute entityAttribute = type.GetCustomAttribute<TableAttribute>();
+
+                if (entityAttribute == null)
+                {
+                    throw new InvalidMappingException("Missing Table attribute on class : " + type.Name);
+                }
+
                 Type genericType = typeof(Table<>).MakeGenericType(new Type[] { type });
                 ITable table = (ITable)Activator.CreateInstance(genericType, new object[] { this, entityAttribute.TableName });
 
@@ -69,7 +76,6 @@ namespace Flex
         public abstract DbCommand CreateSqlCommand();
 
         public abstract DbParameter CreateSqlParameter(string name, object value);
-
 
         public Table<T> GetTable<T>() where T : IEntity
         {

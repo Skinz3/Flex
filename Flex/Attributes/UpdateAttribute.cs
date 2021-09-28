@@ -6,5 +6,6 @@ namespace Flex.Attributes
 {
     public class UpdateAttribute : Attribute
     {
+
     }
 }

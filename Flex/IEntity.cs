@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Flex.Entities
+namespace Flex
 {
     public interface IEntity
     {
-
     }
 }
