@@ -12,7 +12,7 @@ namespace Flex.Tests
         {
         }
 
-        public virtual DbSet<MovieRecord> Movies
+        public virtual DbSet<UserRecord> Movies
         {
             get;
             set;

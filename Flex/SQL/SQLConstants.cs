@@ -20,8 +20,17 @@ namespace Flex.SQL
 
         public const string Insert = "INSERT INTO `{0}` VALUES {1}";
 
-        public const string UPDATE = "UPDATE `{0}` SET {1} WHERE {2} = {3}";
+        public const string Update = "UPDATE `{0}` SET {1} WHERE {2} = {3}";
 
-        public const string REMOVE = "DELETE FROM `{0}` WHERE `{1}` = {2}";
+        public const string Max = "SELECT MAX(`{1}`) FROM `{0}`";
+
+        public const string PrimaryKey = "PRIMARY KEY(`{0}`)";
+
+        public const string AutoIncrement = "AUTO_INCREMENT";
+
+        public const string NotNull = "NOT NULL";
+
+        public const string SqlDateFormat = "yyyy-MM-dd HH:mm:ss";
+
     }
 }

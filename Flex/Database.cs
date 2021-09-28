@@ -2,6 +2,7 @@
 using Flex.Entities;
 using Flex.Exceptions;
 using Flex.Extensions;
+using Flex.Providers;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -11,7 +12,7 @@ using System.Text;
 
 namespace Flex
 {
-    public abstract class Database
+    public class Database
     {
         private Assembly EntitiesAssembly
         {
@@ -23,15 +24,20 @@ namespace Flex
             get;
             private set;
         }
-
-        public abstract char ParameterPrefix
+        public ISqlProvider Provider
         {
             get;
+            private set;
         }
+        public Database(ISqlProvider provider) : this(Assembly.GetEntryAssembly(), provider)
+        {
 
-        public Database(Assembly entitiesAssembly)
+        }
+        public Database(Assembly entitiesAssembly, ISqlProvider provider)
         {
             this.EntitiesAssembly = entitiesAssembly;
+            this.Provider = provider;
+            this.Provider.Connect();
             Build();
         }
 
@@ -54,6 +60,8 @@ namespace Flex
 
                 Tables.Add(type, table);
             }
+
+
         }
         public void CreateAllTables()
         {
@@ -68,14 +76,6 @@ namespace Flex
             table.Drop();
             Tables.Remove(typeof(T));
         }
-
-        public abstract int NonQuery(string query);
-
-        public abstract T Scalar<T>(string query);
-
-        public abstract DbCommand CreateSqlCommand();
-
-        public abstract DbParameter CreateSqlParameter(string name, object value);
 
         public Table<T> GetTable<T>() where T : IEntity
         {

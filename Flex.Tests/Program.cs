@@ -2,6 +2,7 @@
 using Flex.Expressions;
 using Flex.Extensions;
 using Flex.IO;
+using Flex.Providers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,22 +14,24 @@ namespace Flex.Tests
     {
         static void Main()
         {
-            Database database = new MySqlDatabase("gla");// new SQLiteDatabase("file.sqlite");
+            Database database = new Database(new MySqlProvider("test"));// new SQLiteDatabase("file.sqlite");
 
             database.CreateAllTables();
 
-            Table<MovieRecord> table = database.GetTable<MovieRecord>();
+            Table<UserRecord> table = database.GetTable<UserRecord>();
 
-            var movies = table.Select();
+            var users = table.Select();
 
-            MovieRecord movie = new MovieRecord()
+            UserRecord user = new UserRecord()
             {
                 Name = "whassup",
+                CreationDate = DateTime.Now
             };
 
+            table.Insert(user);
 
 
-            table.Insert(movie);
+
 
         }
     }

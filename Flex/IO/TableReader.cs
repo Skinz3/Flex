@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Globalization;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 
@@ -29,7 +30,7 @@ namespace Flex.IO
         {
             List<T> results = new List<T>();
 
-            using (DbCommand command = Table.Database.CreateSqlCommand())
+            using (DbCommand command = Table.Database.Provider.CreateSqlCommand())
             {
                 command.CommandText = query;
 
@@ -63,9 +64,12 @@ namespace Flex.IO
 
             return results;
         }
-
         private object ConvertProperty(object value, PropertyInfo property) // todo, Blob, Enum, boolean? blob if its collection.
         {
+            if (value is DBNull)
+            {
+                return null;
+            }
             if (property.PropertyType.IsCollection() || Table.BlobProperties.Contains(property))
             {
                 return ProtoSerializer.Deserialize(property.PropertyType, (byte[])value);

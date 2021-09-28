@@ -28,7 +28,7 @@ namespace Flex.IO
 
         public void Insert(IEnumerable<T> entities)
         {
-            DbCommand command = Table.Database.CreateSqlCommand();
+            DbCommand command = Table.Database.Provider.CreateSqlCommand();
 
             List<string> queries = new List<string>();
 
@@ -41,9 +41,9 @@ namespace Flex.IO
 
                 foreach (var property in Table.Properties)
                 {
-                    sb.Append(string.Format(Table.Database.ParameterPrefix + "{0}{1},", property.Name, id));
+                    sb.Append(string.Format(Table.Database.Provider.ParameterPrefix + "{0}{1},", property.Name, id));
                     object value = ConvertProperty(property, property.GetValue(entity));
-                    DbParameter parameter = Table.Database.CreateSqlParameter(Table.Database.ParameterPrefix + property.Name + id, value);
+                    DbParameter parameter = Table.Database.Provider.CreateSqlParameter(Table.Database.Provider.ParameterPrefix + property.Name + id, value);
                     command.Parameters.Add(parameter);
                 }
 
@@ -64,7 +64,11 @@ namespace Flex.IO
             {
                 return null;
             }
-            if (Table.BlobProperties.Contains(property) || property.PropertyType.IsCollection())
+            else if (property.PropertyType == typeof(DateTime))
+            {
+                value = ((DateTime)value).ToString(SQLConstants.SqlDateFormat);
+            }
+            else if (Table.BlobProperties.Contains(property) || property.PropertyType.IsCollection())
             {
                 return ProtoSerializer.Serialize(value);
             }
