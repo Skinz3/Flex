@@ -122,9 +122,6 @@ database.EndTransaction(); // <--- execute queries
 
 ```
 
-### Contributors
-
-- Skinz3
 
 
 
