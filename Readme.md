@@ -58,6 +58,7 @@ Flex is a lightweight object-relational mapping (ORM) product for the Microsoft 
 ```csharp
 
   Database database = new MySqlDatabase("MyDatabase","localhost","root","");
+  // or
   Database database = new SQLiteDatabase("database.sqlite");
 
 ```
@@ -111,5 +112,20 @@ database.Insert(new User() { Name : "William" });
 database.EndTransaction(); // <--- execute queries
 
 ```
+
+* Database Copy (from one SGBD to another)
+
+```csharp
+  Database mySqlDb = new MySqlDatabase("MyDatabase","localhost","root","");
+  Database sqlLiteDb = new SQLiteDatabase("database.sqlite");
+
+  sqlLiteDb.Copy(mySqlDb);
+
+```
+
+* Authors
+
+1.Skinz3
+
 
 
