@@ -3,6 +3,7 @@ using Flex.Entities;
 using Flex.Extensions;
 using Flex.SQL;
 using MySql.Data.MySqlClient;
+using ProtoBuf;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -19,44 +20,16 @@ namespace Flex.IO
             get;
             set;
         }
-        private PropertyInfo[] AddProperties
-        {
-            get;
-            set;
-        }
-        private PropertyInfo[] UpdateProperties
-        {
-            get;
-            set;
-        }
-        private PropertyInfo PrimaryProperty
-        {
-            get;
-            set;
-        }
+
         public TableWriter(Table<T> table)
         {
             this.Table = table;
-
-            Type type = typeof(T);
-
-            this.AddProperties = type.GetProperties().Where(property => !property.HasAttribute<TransientAttribute>()).OrderBy(x => x.MetadataToken).ToArray();
-            this.UpdateProperties = AddProperties.Where(x => x.HasAttribute<UpdateAttribute>()).ToArray();
-
-            IEnumerable<PropertyInfo> primaryProperties = AddProperties.Where(x => x.HasAttribute<PrimaryAttribute>());
-
-            if (primaryProperties.Count() > 1)
-            {
-                throw new Exception("Entity " + table.Name + " has more then one primary properties. This is not handled currently.");
-            }
-
-            this.PrimaryProperty = primaryProperties.FirstOrDefault();
         }
 
         public void Insert(IEnumerable<T> entities)
         {
             DbCommand command = Table.Database.CreateSqlCommand();
- 
+
             List<string> queries = new List<string>();
 
             int id = 0;
@@ -66,10 +39,11 @@ namespace Flex.IO
                 StringBuilder sb = new StringBuilder();
                 sb.Append("(");
 
-                foreach (var property in AddProperties)
+                foreach (var property in Table.Properties)
                 {
                     sb.Append(string.Format(Table.Database.ParameterPrefix + "{0}{1},", property.Name, id));
-                    DbParameter parameter = Table.Database.CreateSqlParameter(Table.Database.ParameterPrefix + property.Name + id, ConvertProperty(property.GetValue(entity)));
+                    object value = ConvertProperty(property, property.GetValue(entity));
+                    DbParameter parameter = Table.Database.CreateSqlParameter(Table.Database.ParameterPrefix + property.Name + id, value);
                     command.Parameters.Add(parameter);
                 }
 
@@ -84,12 +58,15 @@ namespace Flex.IO
 
             command.ExecuteNonQuery();
         }
-
-        private object ConvertProperty(object value)
+        private object ConvertProperty(PropertyInfo property, object value)
         {
             if (value == null)
             {
-                return "";
+                return null;
+            }
+            if (Table.BlobProperties.Contains(property) || property.PropertyType.IsCollection())
+            {
+                return ProtoSerializer.Serialize(value);
             }
             return value.ToString();
         }

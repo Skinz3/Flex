@@ -31,7 +31,6 @@ namespace Flex.Tests
             get;
             set;
         }
-        [Blob]
         public string Quality
         {
             get;

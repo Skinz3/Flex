@@ -19,7 +19,6 @@ namespace Flex.IO
             get;
             set;
         }
-
         public TableReader(Table<T> table)
         {
             this.Table = table;
@@ -66,9 +65,9 @@ namespace Flex.IO
 
         private object ConvertProperty(object value, PropertyInfo property) // todo, Blob, Enum, boolean? blob if its collection.
         {
-            if (value is byte[])
+            if (property.PropertyType.IsCollection() || Table.BlobProperties.Contains(property))
             {
-                return "";
+                return ProtoSerializer.Deserialize(property.PropertyType, (byte[])value);
             }
             return Convert.ChangeType(value, property.PropertyType, CultureInfo.InvariantCulture);
         }

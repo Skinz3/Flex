@@ -16,7 +16,7 @@ namespace Flex.SQL
         };
         public static string GetSQLType(PropertyInfo property)
         {
-            if (property.HasAttribute<BlobAttribute>())
+            if (property.HasAttribute<BlobAttribute>() || property.PropertyType.IsCollection())
             {
                 return "BLOB";
             }

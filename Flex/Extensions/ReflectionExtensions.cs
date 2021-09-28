@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -15,6 +16,10 @@ namespace Flex.Extensions
         public static bool HasAttribute<T>(this PropertyInfo property)
         {
             return property.CustomAttributes.Any(x => x.AttributeType == typeof(T));
+        }
+        public static bool IsCollection(this Type type)
+        {
+            return type.GetInterface(nameof(ICollection)) != null;
         }
     }
 }

@@ -36,7 +36,16 @@ namespace Flex.Entities
             get;
             private set;
         }
-
+        internal PropertyInfo[] BlobProperties
+        {
+            get;
+            private set;
+        }
+        internal PropertyInfo[] UpdateProperties
+        {
+            get;
+            private set;
+        }
         private TableReader<T> Reader
         {
             get;
@@ -53,8 +62,10 @@ namespace Flex.Entities
             this.Reader = new TableReader<T>(this);
             this.Writer = new TableWriter<T>(this);
             this.Name = tableName;
-            this.Properties = typeof(T).GetProperties().Where(x => !x.HasAttribute<TransientAttribute>()).ToArray();
+            this.Properties = typeof(T).GetProperties().Where(x => !x.HasAttribute<TransientAttribute>()).OrderBy(x => x.MetadataToken).ToArray();
             this.PrimaryProperty = Properties.FirstOrDefault(x => x.HasAttribute<PrimaryAttribute>());
+            this.UpdateProperties = Properties.Where(x => x.HasAttribute<UpdateAttribute>()).ToArray();
+            this.BlobProperties = Properties.Where(x => x.HasAttribute<BlobAttribute>()).ToArray();
         }
 
         public void Insert(T entity)
