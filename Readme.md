@@ -4,7 +4,7 @@
 
 # Flex 
 
-Flex is a lightweight object-relational mapping (ORM) product for the Microsoft .NET Core and SQL : it provides a framework for mapping an object-oriented domain model to a traditional SQL database. Written in **C# .NET Core 3.1**.
+Flex is a lightweight object-relational mapping (ORM) product for the Microsoft .NET Core and SQL : it provides a framework for mapping an object-oriented domain model to a traditional SQL database. Written in **C# .NET Core 3.1** using active record pattern.
 
 # Exemple of usage
 
@@ -64,7 +64,7 @@ Flex is a lightweight object-relational mapping (ORM) product for the Microsoft 
 
  ## Reading database
 
-* Flex allows the creation of dynamic queries using Linq 
+* Flex allows the creation of dynamic queries using **System.Linq**.
 
 ```csharp
 
