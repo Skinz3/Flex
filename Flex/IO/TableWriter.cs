@@ -30,31 +30,40 @@ namespace Flex.IO
         {
             DbCommand command = Table.Database.Provider.CreateSqlCommand();
 
-            List<string> queries = new List<string>();
+            StringBuilder queryContent = new StringBuilder();
 
             int id = 0;
 
             foreach (var entity in entities)
             {
-                StringBuilder sb = new StringBuilder();
-                sb.Append("(");
+                queryContent.Append("(");
 
                 foreach (var property in Table.Properties)
                 {
-                    sb.Append(string.Format(Table.Database.Provider.ParameterPrefix + "{0}{1},", property.Name, id));
+                    queryContent.Append(string.Format(Table.Database.Provider.ParameterPrefix + "{0}{1},", property.Name, id));
+
                     object value = ConvertProperty(property, property.GetValue(entity));
-                    DbParameter parameter = Table.Database.Provider.CreateSqlParameter(Table.Database.Provider.ParameterPrefix + property.Name + id, value);
+
+                    DbParameter parameter = command.CreateParameter();
+
+                    parameter.ParameterName = Table.Database.Provider.ParameterPrefix + property.Name + id;
+                    parameter.Value = value;
+
                     command.Parameters.Add(parameter);
                 }
 
-                sb = sb.Remove(sb.Length - 1, 1);
-                sb.Append(")");
+                queryContent = queryContent.Remove(queryContent.Length - 1, 1);
+                queryContent.Append(")");
 
-                queries.Add(sb.ToString());
+                queryContent.Append(',');
+
+
                 id++;
             }
 
-            command.CommandText = string.Format(SQLConstants.Insert, Table.Name, string.Format("{0}", string.Join(",", queries)));
+            queryContent = queryContent.Remove(queryContent.Length - 1, 1);
+
+            command.CommandText = string.Format(SQLConstants.Insert, Table.Name, string.Format("{0}", queryContent.ToString()));
 
             command.ExecuteNonQuery();
         }

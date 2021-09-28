@@ -48,11 +48,6 @@ namespace Flex.Providers
             return new SQLiteCommand(Connection);
         }
 
-        public DbParameter CreateSqlParameter(string name, object value)
-        {
-            return new SQLiteParameter(name, value);
-        }
-
         
     }
 }

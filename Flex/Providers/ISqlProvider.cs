@@ -19,7 +19,5 @@ namespace Flex.Providers
         T Scalar<T>(string query);
 
         DbCommand CreateSqlCommand();
-
-        DbParameter CreateSqlParameter(string name, object value);
     }
 }

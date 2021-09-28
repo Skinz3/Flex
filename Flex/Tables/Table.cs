@@ -2,7 +2,6 @@
 using Flex.Expressions;
 using Flex.Extensions;
 using Flex.IO;
-using Flex.Pool;
 using Flex.SQL;
 using MySql.Data.MySqlClient;
 using System;
@@ -98,20 +97,23 @@ namespace Flex.Entities
         {
 
         }
-        public void Delete(T entity)
-        {
-
-        }
-        public int DeleteAll()
-        {
-            return Database.Provider.NonQuery(string.Format(SQLConstants.Delete, Name));
-        }
 
         public void Drop()
         {
             Database.Provider.NonQuery(string.Format(SQLConstants.Drop, Name));
         }
 
+        public void Delete(T entity)
+        {
+            var primaryKey = PrimaryProperty.GetValue(entity);
+            string query = string.Format(SQLConstants.DeleteWhere, Name, PrimaryProperty.Name + "=" + primaryKey);
+
+            Database.Provider.NonQuery(query);
+        }
+        public int DeleteAll()
+        {
+            return Database.Provider.NonQuery(string.Format(SQLConstants.Delete, Name));
+        }
         public IEnumerable<T> Select()
         {
             return Reader.Read(string.Format(SQLConstants.Select, Name));

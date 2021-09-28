@@ -62,11 +62,6 @@ namespace Flex.Providers
             return new MySqlCommand(string.Empty, UseConnection());
         }
 
-        public DbParameter CreateSqlParameter(string name, object value)
-        {
-            return new MySqlParameter(name, value);
-        }
-
        
     }
 }

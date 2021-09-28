@@ -14,7 +14,7 @@ namespace Flex.Tests
     {
         static void Main()
         {
-            Database database = new Database(new MySqlProvider("test"));// new SQLiteDatabase("file.sqlite");
+            Database database = new Database(new MySqlProvider("test")); // new SQLiteProvider("file.sqlite")
 
             database.CreateAllTables();
 
@@ -22,16 +22,15 @@ namespace Flex.Tests
 
             var users = table.Select();
 
+
             UserRecord user = new UserRecord()
             {
-                Name = "whassup",
+                Name = "whassup'",
                 CreationDate = DateTime.Now
             };
 
+
             table.Insert(user);
-
-
-
 
         }
     }

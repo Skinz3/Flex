@@ -6,5 +6,6 @@ namespace Flex
 {
     public interface IEntity
     {
+        
     }
 }
