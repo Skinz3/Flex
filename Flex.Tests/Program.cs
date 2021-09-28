@@ -21,7 +21,6 @@ namespace Flex.Tests
 
             database.CreateAllTables();
 
-
             var users = table.Select();
 
             UserRecord user = new UserRecord()
@@ -29,7 +28,6 @@ namespace Flex.Tests
                 Name = "whassazeup'",
                 CreationDate = DateTime.Now
             };
-
 
 
             table.Insert(user);

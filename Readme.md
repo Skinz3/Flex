@@ -36,7 +36,7 @@ Flex is a lightweight object-relational mapping (ORM) product for the Microsoft 
           set;
       }
 
-      [Blob] // <--- Using Google Protobuf for blob serialization
+      [Blob] // <--- Fast serialization using Google Protobuf 
       public Certificate Certificate 
       {
           get;
@@ -56,9 +56,9 @@ Flex is a lightweight object-relational mapping (ORM) product for the Microsoft 
 
 ```csharp
 
-  Database database = new MySqlDatabase("MyDatabase","localhost","root","");
+  Database database = new Database(new MySqlProvider("myDb","localhost","root",""));
   // or
-  Database database = new SQLiteDatabase("database.sqlite");
+  Database database =  new Database(new SQLiteProvider("file.sqlite"));
 
 ```
 
@@ -115,12 +115,22 @@ database.EndTransaction(); // <--- execute queries
  #### Database Copy (from one SGBD to another)
 
 ```csharp
+
   Database mySqlDb = new MySqlDatabase("MyDatabase","localhost","root","");
   Database sqlLiteDb = new SQLiteDatabase("database.sqlite");
 
   sqlLiteDb.Copy(mySqlDb);
 
 ```
+
+# Dependencies
+
+ | Name        | Version           |
+| ------------- |:-------------:|
+| MySql.Data      | 8.0.11 | 
+| protobuf-net | 3.0.101 |
+| System.Data.SQLite | 1.0.115 | 
+
 
 
 
