@@ -78,8 +78,6 @@ Flex is a lightweight object-relational mapping (ORM) product for the Microsoft 
 
  ## Writting database
 
-* Both ```Update()``` ```Insert()``` and ```Delete()``` are extensions method for IEntity. You can also use ```table.Insert(T Entity)```
-
 ```csharp
 
   User user = new User();
