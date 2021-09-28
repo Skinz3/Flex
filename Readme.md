@@ -4,9 +4,8 @@
 
 # Flex 
 
-Flex is a object-relational mapping (ORM) product for the Microsoft .NET Core and SQL : it provides a framework for mapping an object-oriented domain model to a traditional SQL database.
+Flex is a lightweight object-relational mapping (ORM) product for the Microsoft .NET Core and SQL : it provides a framework for mapping an object-oriented domain model to a traditional SQL database.
 
-> Flex only supports MySql for now, i am actively working on the creation of a db factory to be able to support SQLite, Postgresql etc.
 # Exemple of usage
 
 
@@ -15,7 +14,7 @@ Flex is a object-relational mapping (ORM) product for the Microsoft .NET Core an
 ```csharp
 
   [Table("Users")]
-  public class User : IEntity
+  public class User : IEntity // <--- Interface allows extensions methods for entities
   { 
       [Primary]
       [AutoIncrement]
@@ -37,20 +36,15 @@ Flex is a object-relational mapping (ORM) product for the Microsoft .NET Core an
           get;
           set;
       }
-      /*
-         Using Google Protobuf for blob serialization
-      */
-      [Blob]
-      public Certificate Certificate
+
+      [Blob] // <--- Using Google Protobuf for blob serialization
+      public Certificate Certificate 
       {
           get;
           set;
       }
 
-      /*
-        This property is ignored in SQL Schema
-      */
-      [Transcient] 
+      [Transcient]  // <--- This property is ignored in SQL Schema 
       public bool Connected
       {
           get;
@@ -59,11 +53,13 @@ Flex is a object-relational mapping (ORM) product for the Microsoft .NET Core an
   }
 ```
 
-* Setup
+* Interopability
 
 ```csharp
 
-  MySqlDatabase database = new MySqlDatabase("MyDatabase","localhost","root","");
+  Database database = new MySqlDatabase("MyDatabase","localhost","root","");
+  Database database = new SQLiteDatabase("database.sqlite");
+
 ```
 
 * Reading database
@@ -74,9 +70,9 @@ Flex is a object-relational mapping (ORM) product for the Microsoft .NET Core an
 
   long count = table.Count();
 
-  IEnumerable<User> Users = table.Select(); 
+  IEnumerable<User> Users = table.Select().Execute(); 
 
-  IEnumerable<User> users = table.Select(x=> x.Username == "John Doe").GroupBy(x => x.Ip); // Dynamic query builder
+  IEnumerable<User> users = table.Select(x=> x.Username == "John Doe").GroupBy(x => x.Ip).Execute(); // <--- Dynamic query builder
 
 ```
 
@@ -99,6 +95,20 @@ Both ```Update()``` ```Insert()``` and ```Delete()``` are extensions method for 
   table.DeleteAll();
 
   database.Drop<User>();
+
+```
+
+* Transactional
+
+```csharp
+
+database.BeginTransaction(); // <--- create query cache
+
+database.Insert(new User() { Name : "John" });
+database.Insert(new User() { Name : "Ethan" });
+database.Insert(new User() { Name : "William" });
+
+database.EndTransaction(); // <--- execute queries
 
 ```
 
