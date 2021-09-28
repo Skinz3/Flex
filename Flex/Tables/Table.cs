@@ -54,7 +54,6 @@ namespace Flex.Entities
             this.Name = tableName;
             this.Properties = typeof(T).GetProperties().Where(x => !x.HasAttribute<TransientAttribute>()).ToArray();
             this.PrimaryProperty = Properties.FirstOrDefault(x => x.HasAttribute<PrimaryAttribute>());
-            this.Create();
         }
 
         public void Insert(T entity)
@@ -110,7 +109,7 @@ namespace Flex.Entities
             }
         }
 
-        private void Create()
+        public void Create()
         {
             StringBuilder sb = new StringBuilder();
 

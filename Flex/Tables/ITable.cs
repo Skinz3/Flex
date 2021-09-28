@@ -6,5 +6,6 @@ namespace Flex.Entities
 {
     public interface ITable
     {
+        void Create();
     }
 }
