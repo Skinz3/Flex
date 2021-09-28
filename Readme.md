@@ -6,8 +6,6 @@
 
 Flex is a lightweight object-relational mapping (ORM) product for the Microsoft .NET Core and SQL : it provides a framework for mapping an object-oriented domain model to a traditional SQL database. Written in **C# .NET Core 3.1** using active record pattern.
 
-# Exemple of usage
-
 ## Schema Mapping
 
 ```csharp
@@ -106,9 +104,9 @@ Flex is a lightweight object-relational mapping (ORM) product for the Microsoft 
 
 database.BeginTransaction(); // <--- create query cache
 
-database.Insert(new User() { Name : "John" });
-database.Insert(new User() { Name : "Ethan" });
-database.Insert(new User() { Name : "William" });
+table.Insert(new User() { Name : "John" });
+table.Insert(new User() { Name : "Ethan" });
+table.Insert(new User() { Name : "William" });
 
 database.EndTransaction(); // <--- execute queries
 
