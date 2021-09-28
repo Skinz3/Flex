@@ -19,6 +19,8 @@ namespace Flex
             set;
         }
 
+        public override char ParameterPrefix => '?';
+
         public MySqlDatabase(Assembly entitiesAssembly, string databaseName, string host = "127.0.0.1", string user = "root", string password = "") : base(entitiesAssembly)
         {
             string connectionString = string.Format("Server={0};UserId={1};Password={2};Database={3};SslMode=none;", host, user, password, databaseName);
@@ -29,9 +31,6 @@ namespace Flex
         {
 
         }
-
-
-
 
         internal MySqlConnection UseConnection()
         {
@@ -60,15 +59,14 @@ namespace Flex
             }
         }
 
-        public override DbDataReader ExecuteReader(string query)
+        public override DbCommand CreateSqlCommand()
         {
-            using (var command = new MySqlCommand(query, UseConnection()))
-            {
-                using (MySqlDataReader reader = command.ExecuteReader())
-                {
-                    return reader;
-                }
-            }
+            return new MySqlCommand(string.Empty, UseConnection());
+        }
+
+        public override DbParameter CreateSqlParameter(string name, object value)
+        {
+            return new MySqlParameter(name, value);
         }
     }
 }

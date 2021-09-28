@@ -22,6 +22,11 @@ namespace Flex
             get;
             private set;
         }
+            
+        public abstract char ParameterPrefix
+        {
+            get;
+        }
 
         public Database(Assembly entitiesAssembly)
         {
@@ -61,7 +66,10 @@ namespace Flex
 
         public abstract T Scalar<T>(string query);
 
-        public abstract DbDataReader ExecuteReader(string query);
+        public abstract DbCommand CreateSqlCommand();
+
+        public abstract DbParameter CreateSqlParameter(string name, object value);
+
 
         public Table<T> GetTable<T>() where T : IEntity
         {
@@ -71,7 +79,5 @@ namespace Flex
         {
             return Tables.Values;
         }
-
-     
     }
 }

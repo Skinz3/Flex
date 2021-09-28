@@ -9,7 +9,7 @@ namespace Flex.Expressions
     public class QueryBuilder : ExpressionVisitor
     {
         private StringBuilder sb;
-        private string _orderBy = string.Empty;
+        private readonly string _orderBy = string.Empty;
         private int? _skip = null;
         private int? _take = null;
         private string _whereClause = string.Empty;
@@ -289,8 +289,7 @@ namespace Flex.Expressions
         {
             ConstantExpression sizeExpression = (ConstantExpression)expression.Arguments[1];
 
-            int size;
-            if (int.TryParse(sizeExpression.Value.ToString(), out size))
+            if (int.TryParse(sizeExpression.Value.ToString(), out int size))
             {
                 _take = size;
                 return true;
@@ -303,8 +302,7 @@ namespace Flex.Expressions
         {
             ConstantExpression sizeExpression = (ConstantExpression)expression.Arguments[1];
 
-            int size;
-            if (int.TryParse(sizeExpression.Value.ToString(), out size))
+            if (int.TryParse(sizeExpression.Value.ToString(), out int size))
             {
                 _skip = size;
                 return true;

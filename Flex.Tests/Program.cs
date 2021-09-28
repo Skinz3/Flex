@@ -9,14 +9,21 @@ namespace Flex.Tests
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            Database database = new SQLiteDatabase("file.sqlite");
+            Database database = new SQLiteDatabase("test.sqlite");
             database.CreateAllTables();
 
             Table<MovieRecord> table = database.GetTable<MovieRecord>();
 
-            var movies = table.Select().GroupBy(x => x.Quality);
+            var movies = table.Select();
+
+            MovieRecord movie = new MovieRecord()
+            {
+                Name = "whassup"
+            };
+
+            table.Insert(movie);
 
         }
     }

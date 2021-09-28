@@ -15,6 +15,8 @@ namespace Flex
             set;
         }
 
+        public override char ParameterPrefix => ':';
+
         public SQLiteDatabase(Assembly entitiesAssembly, string filePath) : base(entitiesAssembly)
         {
             this.Connection = new SQLiteConnection("Data Source=" + filePath);
@@ -41,16 +43,14 @@ namespace Flex
             }
         }
 
-        public override DbDataReader ExecuteReader(string query)
+        public override DbCommand CreateSqlCommand()
         {
-            using (SQLiteCommand command = new SQLiteCommand(query, Connection))
-            {
-                using (DbDataReader reader = command.ExecuteReader())
-                {
-                    return reader;
-                }
-                
-            }
+            return new SQLiteCommand(Connection);
+        }
+
+        public override DbParameter CreateSqlParameter(string name, object value)
+        {
+            return new SQLiteParameter(name, value);
         }
     }
 }

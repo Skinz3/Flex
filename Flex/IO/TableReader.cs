@@ -1,5 +1,6 @@
 ﻿using Flex.Attributes;
 using Flex.Entities;
+using Flex.Extensions;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -18,46 +19,57 @@ namespace Flex.IO
             get;
             set;
         }
-     
+
         public TableReader(Table<T> table)
         {
             this.Table = table;
         }
 
-        public IEnumerable<T> Query(string query)
+        public IEnumerable<T> Read(string query)
         {
             List<T> results = new List<T>();
 
-            DbDataReader reader = Table.Database.ExecuteReader(query);
-
-            if (reader.FieldCount != Table.Properties.Length)
+            using (DbCommand command = Table.Database.CreateSqlCommand())
             {
-                throw new InvalidOperationException("Inccorect mapping.");
-            }
-            while (reader.Read())
-            {
-                var obj = new object[Table.Properties.Length];
+                command.CommandText = query;
 
-                for (var i = 0; i < reader.FieldCount; i++) // O(2n) complexity necessary ? only one for loop ?
+                using (DbDataReader reader = command.ExecuteReader())
                 {
-                    obj[i] = ConvertProperty(reader[i], Table.Properties[i]);
+
+                    if (reader.FieldCount != Table.Properties.Length)
+                    {
+                        throw new InvalidOperationException("The mapping of table '" + Table.Name + "' is not consistent with the SQL structure.");
+                    }
+                    while (reader.Read())
+                    {
+                        var obj = new object[Table.Properties.Length];
+
+                        for (var i = 0; i < reader.FieldCount; i++) // O(2n) complexity necessary ? only one for loop ?
+                        {
+                            obj[i] = ConvertProperty(reader[i], Table.Properties[i]);
+                        }
+
+                        T entity = (T)Activator.CreateInstance(typeof(T));
+
+                        for (int i = 0; i < Table.Properties.Length; i++)
+                        {
+                            Table.Properties[i].SetValue(entity, obj[i]);
+                        }
+
+                        results.Add(entity);
+                    }
                 }
-
-                T entity = (T)Activator.CreateInstance(typeof(T));
-
-                for (int i = 0; i < Table.Properties.Length; i++)
-                {
-                    Table.Properties[i].SetValue(entity, obj[i]);
-                }
-
-                results.Add(entity);
             }
 
-            return new List<T>();
+            return results;
         }
 
         private object ConvertProperty(object value, PropertyInfo property) // todo, Blob, Enum, boolean? blob if its collection.
         {
+            if (value is byte[])
+            {
+                return "";
+            }
             return Convert.ChangeType(value, property.PropertyType, CultureInfo.InvariantCulture);
         }
     }

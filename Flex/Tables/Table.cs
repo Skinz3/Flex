@@ -51,6 +51,7 @@ namespace Flex.Entities
         {
             this.Database = database;
             this.Reader = new TableReader<T>(this);
+            this.Writer = new TableWriter<T>(this);
             this.Name = tableName;
             this.Properties = typeof(T).GetProperties().Where(x => !x.HasAttribute<TransientAttribute>()).ToArray();
             this.PrimaryProperty = Properties.FirstOrDefault(x => x.HasAttribute<PrimaryAttribute>());
@@ -58,7 +59,7 @@ namespace Flex.Entities
 
         public void Insert(T entity)
         {
-
+            Writer.Insert(new[] { entity });
         }
         public void Update(T entity)
         {
@@ -80,13 +81,13 @@ namespace Flex.Entities
 
         public IEnumerable<T> Select()
         {
-            return Reader.Query(string.Format(SQLConstants.Select, Name));
+            return Reader.Read(string.Format(SQLConstants.Select, Name));
         }
         public IEnumerable<T> Select(Expression<Func<T, bool>> expression)
         {
             QueryBuilder builder = new QueryBuilder();
             builder.Translate(expression);
-            return Reader.Query(string.Format(SQLConstants.SelectWhere, Name, builder.WhereClause));
+            return Reader.Read(string.Format(SQLConstants.SelectWhere, Name, builder.WhereClause));
         }
 
         public void Create()
