@@ -125,7 +125,7 @@ database.EndTransaction(); // <--- execute queries
 
 * Authors
 
-1.Skinz3
+- Skinz3
 
 
 
