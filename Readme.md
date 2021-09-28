@@ -64,6 +64,8 @@ Flex is a lightweight object-relational mapping (ORM) product for the Microsoft 
 
  ## Reading database
 
+* Flex allows the creation of dynamic queries using Linq 
+
 ```csharp
 
   Table<User> table = database.GetTable<User>();
@@ -78,7 +80,7 @@ Flex is a lightweight object-relational mapping (ORM) product for the Microsoft 
 
  ## Writting database
 
-Both ```Update()``` ```Insert()``` and ```Delete()``` are extensions method for IEntity. You can also use ```table.Insert(T Entity)```
+* Both ```Update()``` ```Insert()``` and ```Delete()``` are extensions method for IEntity. You can also use ```table.Insert(T Entity)```
 
 ```csharp
 
@@ -86,11 +88,11 @@ Both ```Update()``` ```Insert()``` and ```Delete()``` are extensions method for 
   user.Name = "John Doe";
   user.Certificate = new Certificate();
 
-  user.Insert(); // Extension method for IEntity, you can also use table.Insert(T entity)
+  table.Insert(user);
 
   user.Ip = "127.0.0.1";
 
-  user.Update();
+  table.Update(user);
 
   table.DeleteAll();
 
