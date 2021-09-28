@@ -123,7 +123,7 @@ database.EndTransaction(); // <--- execute queries
 
 ```
 
-* Authors
+ #### Authors
 
 - Skinz3
 
