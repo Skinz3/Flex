@@ -16,22 +16,27 @@ namespace Flex.Tests
         {
             Database database = new Database(new MySqlProvider("test")); // new SQLiteProvider("file.sqlite")
 
+            Table<UserRecord> table = database.GetTable<UserRecord>();
+            table.Drop();
+
             database.CreateAllTables();
 
-            Table<UserRecord> table = database.GetTable<UserRecord>();
 
             var users = table.Select();
 
-
             UserRecord user = new UserRecord()
             {
-                Name = "whassup'",
+                Name = "whassazeup'",
                 CreationDate = DateTime.Now
             };
 
 
+
             table.Insert(user);
 
+            user.Name = "ville";
+
+            table.Update(user);
         }
     }
 }

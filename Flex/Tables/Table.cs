@@ -95,7 +95,7 @@ namespace Flex.Entities
         }
         public void Update(T entity)
         {
-
+            Writer.Update(new[] { entity });
         }
 
         public void Drop()

@@ -1,5 +1,6 @@
 ﻿using Flex.Attributes;
 using Flex.Entities;
+using Flex.Exceptions;
 using Flex.Extensions;
 using Flex.SQL;
 using MySql.Data.MySqlClient;
@@ -67,6 +68,47 @@ namespace Flex.IO
 
             command.ExecuteNonQuery();
         }
+
+        public int Update(IEnumerable<T> entities)
+        {
+            if (Table.UpdateProperties.Length == 0)
+            {
+                throw new InvalidMappingException("Unable to update elements. " + Table.Name + " has no update property.");
+            }
+
+            using (DbCommand command = Table.Database.Provider.CreateSqlCommand())
+            {
+                int i = 0;
+
+                foreach (var entity in entities)
+                {
+                    StringBuilder sb = new StringBuilder();
+
+                    foreach (var property in Table.UpdateProperties)
+                    {
+                        sb.Append(string.Format("{2} = {3}{0}{1},", property.Name, i, property.Name, Table.Database.Provider.ParameterPrefix));
+
+                        MySqlParameter parameter = new MySqlParameter(Table.Database.Provider.ParameterPrefix + property.Name + i,
+                            ConvertProperty(property, property.GetValue(entity)));
+
+                        command.Parameters.Add(parameter);
+                    }
+
+                    sb = sb.Remove(sb.Length - 1, 1);
+
+                    var text = string.Format("{0}", string.Join(",", sb.ToString()));
+
+                    var primary = Table.PrimaryProperty.GetValue(entity);
+                    command.CommandText += string.Format(SQLConstants.Update, Table.Name, text, Table.PrimaryProperty.Name, primary.ToString()) + ";";
+
+                    i++;
+                }
+
+                return command.ExecuteNonQuery();
+            }
+
+        }
+
         private object ConvertProperty(PropertyInfo property, object value)
         {
             if (value == null)

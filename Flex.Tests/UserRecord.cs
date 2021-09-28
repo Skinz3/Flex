@@ -16,6 +16,7 @@ namespace Flex.Tests
             get;
             set;
         }
+        [Update]
         [Primary]
         public string Name
         {
