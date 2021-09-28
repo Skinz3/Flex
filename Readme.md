@@ -8,7 +8,7 @@ Flex is a lightweight object-relational mapping (ORM) product for the Microsoft 
 
 # Exemple of usage
 
-#### Schema Mapping
+## Schema Mapping
 
 ```csharp
 
@@ -52,7 +52,7 @@ Flex is a lightweight object-relational mapping (ORM) product for the Microsoft 
   }
 ```
 
- #### Interopability
+ ## Interopability
 
 ```csharp
 
@@ -62,7 +62,7 @@ Flex is a lightweight object-relational mapping (ORM) product for the Microsoft 
 
 ```
 
- #### Reading database
+ ## Reading database
 
 ```csharp
 
@@ -76,7 +76,7 @@ Flex is a lightweight object-relational mapping (ORM) product for the Microsoft 
 
 ```
 
- #### Writting database
+ ## Writting database
 
 Both ```Update()``` ```Insert()``` and ```Delete()``` are extensions method for IEntity. You can also use ```table.Insert(T Entity)```
 
@@ -98,7 +98,7 @@ Both ```Update()``` ```Insert()``` and ```Delete()``` are extensions method for 
 
 ```
 
- #### Transactional
+ ## Transactional
 
 ```csharp
 
@@ -112,7 +112,7 @@ database.EndTransaction(); // <--- execute queries
 
 ```
 
- #### Database Copy (from one SGBD to another)
+ ## Database Copy (from one SGBD to another)
 
 ```csharp
 
