@@ -21,7 +21,7 @@ namespace Flex.Entities
             private set;
         }
 
-        internal MySqlDatabase Database
+        internal Database Database
         {
             get;
             private set;
@@ -47,7 +47,7 @@ namespace Flex.Entities
             get;
             set;
         }
-        public Table(MySqlDatabase database, string tableName)
+        public Table(Database database, string tableName)
         {
             this.Database = database;
             this.Reader = new TableReader<T>(this);
@@ -70,12 +70,12 @@ namespace Flex.Entities
         }
         public int DeleteAll()
         {
-            return NonQuery(string.Format(SQLConstants.Delete, Name));
+            return Database.NonQuery(string.Format(SQLConstants.Delete, Name));
         }
 
         public void Drop()
         {
-            NonQuery(string.Format(SQLConstants.Drop, Name));
+            Database.NonQuery(string.Format(SQLConstants.Drop, Name));
         }
 
         public IEnumerable<T> Select()
@@ -89,25 +89,9 @@ namespace Flex.Entities
             return Reader.Query(string.Format(SQLConstants.SelectWhere, Name, builder.WhereClause));
         }
 
-        public int NonQuery(string query)
-        {
-            MySqlConnection connection = Database.UseConnection();
+        
 
-            using (var command = new MySqlCommand(query, connection))
-            {
-                return command.ExecuteNonQuery();
-            }
-        }
-
-        public TResult Scalar<TResult>(string query)
-        {
-            MySqlConnection connection = Database.UseConnection();
-
-            using (var command = new MySqlCommand(query, connection))
-            {
-                return (TResult)command.ExecuteScalar();
-            }
-        }
+       
 
         public void Create()
         {
@@ -133,12 +117,12 @@ namespace Flex.Entities
 
             }
 
-            NonQuery(string.Format(SQLConstants.CreateTable, Name, sb.ToString()));
+            Database.NonQuery(string.Format(SQLConstants.CreateTable, Name, sb.ToString()));
         }
 
         public long Count()
         {
-            return Scalar<long>(string.Format(SQLConstants.Count, Name));
+            return Database.Scalar<long>(string.Format(SQLConstants.Count, Name));
         }
     }
 }

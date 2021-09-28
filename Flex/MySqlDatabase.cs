@@ -30,7 +30,7 @@ namespace Flex
         }
 
 
-      
+
 
         internal MySqlConnection UseConnection()
         {
@@ -43,5 +43,24 @@ namespace Flex
             return MySqlConnection;
         }
 
+        public override int NonQuery(string query)
+        {
+            MySqlConnection connection = UseConnection();
+
+            using (var command = new MySqlCommand(query, connection))
+            {
+                return command.ExecuteNonQuery();
+            }
+        }
+
+        public override T Scalar<T>(string query)
+        {
+            MySqlConnection connection = UseConnection();
+
+            using (var command = new MySqlCommand(query, connection))
+            {
+                return (T)command.ExecuteScalar();
+            }
+        }
     }
 }

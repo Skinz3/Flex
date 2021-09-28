@@ -56,6 +56,10 @@ namespace Flex
             Tables.Remove(typeof(T));
         }
 
+        public abstract int NonQuery(string query);
+
+        public abstract T Scalar<T>(string query);
+
         public Table<T> GetTable<T>() where T : IEntity
         {
             return (Table<T>)Tables[typeof(T)];
