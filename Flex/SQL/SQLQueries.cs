@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Flex.SQL
 {
-    class SQLConstants
+    class SQLQueries
     {
         public const string CreateTable = "CREATE TABLE if not exists {0} ({1})";
 

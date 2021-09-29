@@ -11,9 +11,13 @@ namespace Flex.SQL
     {
         private static Dictionary<Type, string> Mapping = new Dictionary<Type, string>()
         {
-            { typeof(string), "VARCHAR(255)" },
-            { typeof(int), "INT" },
-            { typeof(DateTime),"DATETIME" },
+            { typeof(string),   SQLTypes.VARCHAR(255) },
+            { typeof(int),      SQLTypes.INT},
+            { typeof(long),     SQLTypes.BIGINT },
+            { typeof(short),    SQLTypes.SMALLINT },
+            { typeof(byte),     SQLTypes.TINYINT },
+            { typeof(DateTime), SQLTypes.DATETIME },
+
         };
         public static string GetSQLType(PropertyInfo property)
         {
