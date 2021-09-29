@@ -18,7 +18,7 @@ namespace Flex.Tests
         {
             //  Database database = new Database(new SQLiteProvider("file.sqlite"));
 
-            Database database = new Database(new MySqlProvider("gla"));
+            Database database = new Database(new MySqlProvider("gla", "127.0.0.1", "root", ""));
 
             Table<UserRecord> table = database.GetTable<UserRecord>();
 
@@ -28,13 +28,14 @@ namespace Flex.Tests
 
             var values = table.Select();
 
-            var test = table.Select(x => x.CreationDate == DateTime.Now);
+         
 
             table.Scheduler.InsertLater(new UserRecord() { Id = 1, Name = "Benoit" });
             table.Scheduler.InsertLater(new UserRecord() { Id = 2, Name = "Jean" });
             table.Scheduler.InsertLater(new UserRecord() { Id = 3, Name = "Kevin" });
 
             table.Scheduler.Apply();
+
         }
     }
 }

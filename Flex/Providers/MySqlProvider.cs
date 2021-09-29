@@ -23,9 +23,13 @@ namespace Flex.Providers
         {
             this.MySqlConnection = connection;
         }
-        public MySqlProvider(string databaseName, string host = "127.0.0.1", string user = "root", string password = "")
+        public MySqlProvider(string connectionString)
         {
-            MySqlConnection = new MySqlConnection(string.Format(DefaultConnectionString, host, user, password, databaseName));
+            MySqlConnection = new MySqlConnection(connectionString);
+        }
+        public MySqlProvider(string databaseName, string host, string user, string password) : this(string.Format(DefaultConnectionString, host, user, password, databaseName))
+        {
+
         }
 
         public void Connect()

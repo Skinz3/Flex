@@ -12,7 +12,7 @@ namespace Flex.SQL
 
         public const string Select = "SELECT * FROM `{0}`";
 
-        public const string SelectWhere = "SELECT * from `{0}` where `{1}`";
+        public const string SelectWhere = "SELECT * from `{0}` where {1}";
 
         public const string Drop = "DROP TABLE IF EXISTS {0}";
 
