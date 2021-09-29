@@ -36,7 +36,6 @@ namespace Flex.IO
 
                 using (DbDataReader reader = command.ExecuteReader())
                 {
-
                     if (reader.FieldCount != Table.Properties.Length)
                     {
                         throw new InvalidMappingException("The mapping of table '" + Table.Name + "' is not consistent with the SQL structure.");

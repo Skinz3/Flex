@@ -129,38 +129,38 @@ namespace Flex.Entities
 
         public void Drop()
         {
-            Database.Provider.NonQuery(string.Format(SQLQueries.Drop, Name));
+            Database.Provider.NonQuery(string.Format(SQLQueries.DROP, Name));
         }
 
         public void Delete(T entity)
         {
             var primaryKey = PrimaryProperty.GetValue(entity);
-            string query = string.Format(SQLQueries.DeleteWhere, Name, PrimaryProperty.Name + "=" + primaryKey);
+            string query = string.Format(SQLQueries.DELETE, Name) + string.Format(SQLQueries.WHERE_CLAUSE, PrimaryProperty.Name + "=" + primaryKey);
             Database.Provider.NonQuery(query);
         }
         public int DeleteAll()
         {
-            return Database.Provider.NonQuery(string.Format(SQLQueries.Delete, Name));
+            return Database.Provider.NonQuery(string.Format(SQLQueries.DELETE, Name));
         }
         public IEnumerable<T> Select()
         {
-            return Reader.Read(string.Format(SQLQueries.Select, Name));
+            return Reader.Read(string.Format(SQLQueries.SELECT, Name));
         }
         public IEnumerable<T> Select(Expression<Func<T, bool>> expression)
         {
             QueryBuilder builder = new QueryBuilder();
             builder.Translate(expression);
-            return Reader.Read(string.Format(SQLQueries.SelectWhere, Name, builder.WhereClause));
+            return Reader.Read(string.Format(SQLQueries.SELECT, Name) + string.Format(SQLQueries.WHERE_CLAUSE, builder.WhereClause));
         }
         public TOut Max<TOut>(Expression<Func<T, TOut>> expression)
         {
             QueryBuilder builder = new QueryBuilder();
             builder.Translate(expression);
-            return Database.Provider.Scalar<TOut>(string.Format(SQLQueries.Max, Name, builder.WhereClause));
+            return Database.Provider.Scalar<TOut>(string.Format(SQLQueries.MAX, Name, builder.WhereClause));
         }
         internal object Max(string fieldName)
         {
-            return Database.Provider.Scalar<object>(string.Format(SQLQueries.Max, Name, fieldName));
+            return Database.Provider.Scalar<object>(string.Format(SQLQueries.MAX, Name, fieldName));
         }
         public void Create()
         {
@@ -176,7 +176,7 @@ namespace Flex.Entities
                 if (NotNullProperties.Contains(property))
                 {
                     sb.Append(" ");
-                    sb.Append(SQLQueries.NotNull);
+                    sb.Append(SQLQueries.NOT_NULL);
                 }
 
                 /*if (property == PrimaryProperty && PrimaryAttribute.GenerationType == GenerationType.AutoIncrement)
@@ -193,15 +193,15 @@ namespace Flex.Entities
 
             if (PrimaryProperty != null)
             {
-                sb.Append(string.Format(SQLQueries.PrimaryKey, PrimaryProperty.Name));
+                sb.Append(string.Format(SQLQueries.PRIMARY_KEY, PrimaryProperty.Name));
             }
 
-            Database.Provider.NonQuery(string.Format(SQLQueries.CreateTable, Name, sb.ToString()));
+            Database.Provider.NonQuery(string.Format(SQLQueries.CREATE_TABLE, Name, sb.ToString()));
         }
 
         public long Count()
         {
-            return Database.Provider.Scalar<long>(string.Format(SQLQueries.Count, Name));
+            return Database.Provider.Scalar<long>(string.Format(SQLQueries.COUNT, Name));
         }
 
         public IScheduler GetScheduler()

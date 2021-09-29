@@ -39,6 +39,7 @@ namespace Flex
             this.Provider = provider;
             this.Provider.Connect();
             Build();
+            CreateAllTables();
         }
 
         private void Build()

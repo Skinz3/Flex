@@ -69,7 +69,7 @@ namespace Flex.IO
 
             queryContent = queryContent.Remove(queryContent.Length - 1, 1);
 
-            command.CommandText = string.Format(SQLQueries.Insert, Table.Name, string.Format("{0}", queryContent.ToString()));
+            command.CommandText = string.Format(SQLQueries.INSERT, Table.Name, string.Format("{0}", queryContent.ToString()));
 
             return command.ExecuteNonQuery();
         }
@@ -108,7 +108,7 @@ namespace Flex.IO
                     var text = string.Format("{0}", string.Join(",", sb.ToString()));
 
                     var primary = Table.PrimaryProperty.GetValue(entity);
-                    command.CommandText += string.Format(SQLQueries.Update, Table.Name, text, Table.PrimaryProperty.Name, primary.ToString()) + ";";
+                    command.CommandText += string.Format(SQLQueries.UPDATE, Table.Name, text, Table.PrimaryProperty.Name, primary.ToString()) + ";";
 
                     i++;
                 }
@@ -126,7 +126,7 @@ namespace Flex.IO
             }
             else if (property.PropertyType == typeof(DateTime))
             {
-                value = ((DateTime)value).ToString(SQLQueries.SqlDateFormat);
+                value = ((DateTime)value).ToString(SQLQueries.DATE_FORMAT);
             }
             else if (Table.BlobProperties.Contains(property) || property.PropertyType.IsCollection())
             {

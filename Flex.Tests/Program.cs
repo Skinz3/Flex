@@ -26,10 +26,6 @@ namespace Flex.Tests
 
             table.Create();
 
-            var values = table.Select();
-
-         
-
             table.Scheduler.InsertLater(new UserRecord() { Id = 1, Name = "Benoit" });
             table.Scheduler.InsertLater(new UserRecord() { Id = 2, Name = "Jean" });
             table.Scheduler.InsertLater(new UserRecord() { Id = 3, Name = "Kevin" });

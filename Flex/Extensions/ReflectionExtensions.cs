@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Flex.Extensions
 {
-    public static class ReflectionExtensions
+    public static class ReflectionExtensions 
     {
         public static bool HasInterface<T>(this Type type) where T : class
         {
@@ -19,7 +19,7 @@ namespace Flex.Extensions
         }
         public static bool IsCollection(this Type type)
         {
-            return type.GetInterface(nameof(ICollection)) != null;
+            return type.GetInterface(nameof(ICollection)) != null; 
         }
     }
 }
