@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Flex.Extensions
 {
+    /* 
+     * https://jonlabelle.com/snippets/view/csharp/task-factory-extensions
+     */
     public static class TaskFactoryExtensions
     {
         /// <summary>
