@@ -44,23 +44,31 @@ namespace Flex.IO
             {
                 queryContent.Append("(");
 
+                string prefix = "";
+
                 foreach (var property in Table.Properties)
                 {
-                    queryContent.Append(string.Format(Table.Database.Provider.ParameterPrefix + "{0}{1},", property.Name, id));
+                    queryContent.Append(prefix);
+                    prefix = ",";
 
                     object value = ConvertProperty(property, property.GetValue(entity));
 
-                    DbParameter parameter = command.CreateParameter();
-
-                    parameter.ParameterName = Table.Database.Provider.ParameterPrefix + property.Name + id;
-                    parameter.Value = value;
-
-                    command.Parameters.Add(parameter);
+                    if (value is byte[])
+                    {
+                        queryContent.Append(string.Format(Table.Database.Provider.ParameterPrefix + "{0}{1}", property.Name, id));
+                        string name = Table.Database.Provider.ParameterPrefix + property.Name + id;
+                        DbParameter parameter = command.CreateParameter();
+                        parameter.ParameterName = name;
+                        parameter.Value = value;
+                        command.Parameters.Add(parameter);
+                    }
+                    else
+                    {
+                        queryContent.Append("'" + value + "'");
+                    }
                 }
 
-                queryContent = queryContent.Remove(queryContent.Length - 1, 1);
                 queryContent.Append(")");
-
                 queryContent.Append(',');
 
 
@@ -69,8 +77,9 @@ namespace Flex.IO
 
             queryContent = queryContent.Remove(queryContent.Length - 1, 1);
 
-            command.CommandText = string.Format(SQLQueries.INSERT, Table.Name, string.Format("{0}", queryContent.ToString()));
+            var properties = string.Join(',', Table.Properties.Select(x => x.Name));
 
+            command.CommandText = string.Format(SQLQueries.INSERT, Table.Name, properties, string.Format("{0}", queryContent.ToString()));
             return command.ExecuteNonQuery();
         }
 
@@ -131,6 +140,8 @@ namespace Flex.IO
             else if (Table.BlobProperties.Contains(property) || property.PropertyType.IsCollection())
             {
                 return ProtoSerializer.Serialize(value);
+                //var hex = BitConverter.ToString(buffer).Replace("-", string.Empty);
+                // return hex;
             }
             return value.ToString();
         }

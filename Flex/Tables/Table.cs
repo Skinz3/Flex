@@ -113,10 +113,10 @@ namespace Flex.Entities
         {
             Writer.Insert(new[] { entity });
         }
+
         public void Insert(IEnumerable<T> entities)
         {
             Writer.Insert(entities);
-
         }
         public void Update(T entity)
         {

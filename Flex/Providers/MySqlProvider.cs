@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Flex.SQL;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -31,7 +32,14 @@ namespace Flex.Providers
         {
 
         }
-
+        public void SetMaxAllowedPacket(double sizeMb)
+        {
+            NonQuery(string.Format(SQLQueries.SET_MAX_ALLOWED_PACKET, (sizeMb * 1048576d).ToString()));
+        }
+        public double GetMaxAllowedPacket()
+        {
+            return Scalar<ulong>(SQLQueries.GET_MAX_ALLOWED_PACKET) / 1048576d;
+        }
         public void Connect()
         {
             UseConnection();

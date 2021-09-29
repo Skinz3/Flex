@@ -18,7 +18,7 @@ namespace Flex.SQL
 
         public const string DELETE = "DELETE FROM {0}";
 
-        public const string INSERT = "INSERT INTO `{0}` VALUES {1}";
+        public const string INSERT = "INSERT INTO `{0}` ({1}) VALUES {2}";
 
         public const string UPDATE = "UPDATE `{0}` SET {1} WHERE {2} = {3}";
 
@@ -32,5 +32,8 @@ namespace Flex.SQL
 
         public const string DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
+        public const string SET_MAX_ALLOWED_PACKET = "SET GLOBAL max_allowed_packet = {0}";
+
+        public const string GET_MAX_ALLOWED_PACKET = "SELECT @@global.max_allowed_packet";
     }
 }

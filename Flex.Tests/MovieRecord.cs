@@ -7,8 +7,8 @@ using System.Text;
 
 namespace Flex.Tests
 {
-    [Table("users")]
-    public class UserRecord : IEntity
+    [Table("movies")]
+    public class MovieRecord : IEntity
     {
         [Primary]
         public int Id
@@ -16,13 +16,27 @@ namespace Flex.Tests
             get;
             set;
         }
-        [Update]
         public string Name
         {
             get;
             set;
         }
-        public DateTime CreationDate
+        public string Image
+        {
+            get;
+            set;
+        }
+        public string StreamLinks
+        {
+            get;
+            set;
+        }
+        public string Quality
+        {
+            get;
+            set;
+        }
+        public string OriginalLink
         {
             get;
             set;
