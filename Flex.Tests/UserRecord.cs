@@ -10,14 +10,12 @@ namespace Flex.Tests
     public class UserRecord : IEntity
     {
         [Primary]
-        [AutoIncrement]
         public int Id
         {
             get;
             set;
         }
         [Update]
-        [Primary]
         public string Name
         {
             get;

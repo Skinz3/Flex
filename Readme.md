@@ -96,17 +96,17 @@ Flex is a lightweight object-relational mapping (ORM) product for the Microsoft 
 
 ```
 
- ## Transactional
+ ## Query Scheduler
+
+* Schedulers can be used to reduce the number of transactions made to the database. Schedulers are thread safe. It is also possible to perform cyclic synchronization.
 
 ```csharp
 
-database.BeginTransaction(); // <--- create query cache
+table.Scheduler.InsertLater(new User() { Name : "John" });
+table.Scheduler.InsertLater(new User() { Name : "Ethan" });
+table.Scheduler.InsertLater(new User() { Name : "William" });
 
-table.Insert(new User() { Name : "John" });
-table.Insert(new User() { Name : "Ethan" });
-table.Insert(new User() { Name : "William" });
-
-database.EndTransaction(); // <--- execute queries
+table.Scheduler.Apply(); // <--- Only one query is executed.
 
 ```
 

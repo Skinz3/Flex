@@ -3,10 +3,12 @@ using Flex.Expressions;
 using Flex.Extensions;
 using Flex.IO;
 using Flex.Providers;
+using Flex.Schedulers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 
 namespace Flex.Tests
 {
@@ -14,27 +16,17 @@ namespace Flex.Tests
     {
         static void Main()
         {
-            Database database = new Database(new MySqlProvider("test")); // new SQLiteProvider("file.sqlite")
+            Database database = new Database(new MySqlProvider("gla")); // new SQLiteProvider("file.sqlite")
 
             Table<UserRecord> table = database.GetTable<UserRecord>();
-            table.Drop();
 
-            database.CreateAllTables();
+            table.Create();
 
-            var users = table.Select();
+            table.Scheduler.InsertLater(new UserRecord() { Id = 1, Name = "Benoit" });
+            table.Scheduler.InsertLater(new UserRecord() { Id = 2, Name = "Jean" });
+            table.Scheduler.InsertLater(new UserRecord() { Id = 3, Name = "Kevin" });
 
-            UserRecord user = new UserRecord()
-            {
-                Name = "whassazeup'",
-                CreationDate = DateTime.Now
-            };
-
-
-            table.Insert(user);
-
-            user.Name = "ville";
-
-            table.Update(user);
+            table.Scheduler.Apply();
         }
     }
 }

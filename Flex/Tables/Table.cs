@@ -1,7 +1,9 @@
 ﻿using Flex.Attributes;
+using Flex.Exceptions;
 using Flex.Expressions;
 using Flex.Extensions;
 using Flex.IO;
+using Flex.Schedulers;
 using Flex.SQL;
 using MySql.Data.MySqlClient;
 using System;
@@ -26,10 +28,21 @@ namespace Flex.Entities
             get;
             private set;
         }
+
+        public TableScheduler<T> Scheduler
+        {
+            get;
+            private set;
+        }
         internal PropertyInfo PrimaryProperty
         {
             get;
             private set;
+        }
+        internal PrimaryAttribute PrimaryAttribute
+        {
+            get;
+            set;
         }
         internal PropertyInfo[] Properties
         {
@@ -42,11 +55,6 @@ namespace Flex.Entities
             private set;
         }
         internal PropertyInfo[] UpdateProperties
-        {
-            get;
-            private set;
-        }
-        internal PropertyInfo[] AutoIncrementProperties
         {
             get;
             private set;
@@ -66,11 +74,17 @@ namespace Flex.Entities
             get;
             set;
         }
+        private ulong AutoIncrementId
+        {
+            get;
+            set;
+        }
         public Table(Database database, string tableName)
         {
             this.Database = database;
             this.Reader = new TableReader<T>(this);
             this.Writer = new TableWriter<T>(this);
+            this.Scheduler = new TableScheduler<T>(this);
             this.Name = tableName;
             this.Build();
         }
@@ -78,10 +92,20 @@ namespace Flex.Entities
         private void Build()
         {
             this.Properties = typeof(T).GetProperties().Where(x => !x.HasAttribute<TransientAttribute>()).OrderBy(x => x.MetadataToken).ToArray();
-            this.PrimaryProperty = Properties.FirstOrDefault(x => x.HasAttribute<PrimaryAttribute>());
             this.UpdateProperties = Properties.Where(x => x.HasAttribute<UpdateAttribute>()).ToArray();
             this.BlobProperties = Properties.Where(x => x.HasAttribute<BlobAttribute>()).ToArray();
-            this.AutoIncrementProperties = Properties.Where(x => x.HasAttribute<AutoIncrementAttribute>()).ToArray();
+
+            var primaryProperties = Properties.Where(x => x.HasAttribute<PrimaryAttribute>());
+
+            if (primaryProperties.Count() != 1)
+            {
+                throw new InvalidMappingException("Entity " + typeof(T).Name + " must own one primary property.");
+            }
+
+            PrimaryProperty = primaryProperties.First();
+
+            PrimaryAttribute = PrimaryProperty.GetCustomAttribute<PrimaryAttribute>();
+
             this.NotNullProperties = Properties.Where(x => x.HasAttribute<NotNullAttribute>()).ToArray();
         }
 
@@ -92,6 +116,7 @@ namespace Flex.Entities
         public void Insert(IEnumerable<T> entities)
         {
             Writer.Insert(entities);
+
         }
         public void Update(T entity)
         {
@@ -107,7 +132,6 @@ namespace Flex.Entities
         {
             var primaryKey = PrimaryProperty.GetValue(entity);
             string query = string.Format(SQLConstants.DeleteWhere, Name, PrimaryProperty.Name + "=" + primaryKey);
-
             Database.Provider.NonQuery(query);
         }
         public int DeleteAll()
@@ -151,11 +175,11 @@ namespace Flex.Entities
                     sb.Append(SQLConstants.NotNull);
                 }
 
-                if (AutoIncrementProperties.Contains(property))
+                /*if (property == PrimaryProperty && PrimaryAttribute.GenerationType == GenerationType.AutoIncrement)
                 {
                     sb.Append(" ");
                     sb.Append(SQLConstants.AutoIncrement);
-                }
+                } */
 
                 if (i < Properties.Length - 1 || PrimaryProperty != null)
                 {
@@ -176,6 +200,9 @@ namespace Flex.Entities
             return Database.Provider.Scalar<long>(string.Format(SQLConstants.Count, Name));
         }
 
-
+        public IScheduler GetScheduler()
+        {
+            return Scheduler;
+        }
     }
 }
