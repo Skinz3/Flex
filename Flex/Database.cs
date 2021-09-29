@@ -89,9 +89,18 @@ namespace Flex
         {
             return (Table<T>)Tables[typeof(T)];
         }
+        public ITable GetTable(string name)
+        {
+            return Tables.Values.FirstOrDefault(x => x.Name == name);
+        }
         public IEnumerable<ITable> GetTables()
         {
             return Tables.Values;
+        }
+
+        public void CopyTo(Database target)
+        {
+            throw new NotImplementedException("This functionality is not available yet.");
         }
     }
 }

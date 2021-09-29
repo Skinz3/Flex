@@ -7,8 +7,12 @@ namespace Flex.Entities
 {
     public interface ITable
     {
-        void Create();
-
+        string Name
+        {
+            get;
+        }
         IScheduler GetScheduler();
+
+        void Create();
     }
 }
