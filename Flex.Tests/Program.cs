@@ -28,6 +28,8 @@ namespace Flex.Tests
 
             var values = table.Select();
 
+            var test = table.Select(x => x.CreationDate == DateTime.Now);
+
             table.Scheduler.InsertLater(new UserRecord() { Id = 1, Name = "Benoit" });
             table.Scheduler.InsertLater(new UserRecord() { Id = 2, Name = "Jean" });
             table.Scheduler.InsertLater(new UserRecord() { Id = 3, Name = "Kevin" });
