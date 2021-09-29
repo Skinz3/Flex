@@ -63,6 +63,13 @@ namespace Flex
 
 
         }
+        public void ApplySchedulers()
+        {
+            foreach (var table in GetTables())
+            {
+                table.GetScheduler().Apply();
+            }
+        }
         public void CreateAllTables()
         {
             foreach (var table in Tables.Values)

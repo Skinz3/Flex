@@ -27,8 +27,13 @@ namespace Flex.IO
             this.Table = table;
         }
 
-        public void Insert(IEnumerable<T> entities)
+        public int Insert(IEnumerable<T> entities)
         {
+            if (entities.Count() == 0)
+            {
+                return 0;
+            }
+
             DbCommand command = Table.Database.Provider.CreateSqlCommand();
 
             StringBuilder queryContent = new StringBuilder();
@@ -66,11 +71,15 @@ namespace Flex.IO
 
             command.CommandText = string.Format(SQLConstants.Insert, Table.Name, string.Format("{0}", queryContent.ToString()));
 
-            command.ExecuteNonQuery();
+            return command.ExecuteNonQuery();
         }
 
         public int Update(IEnumerable<T> entities)
         {
+            if (entities.Count() == 0)
+            {
+                return 0;
+            }
             if (Table.UpdateProperties.Length == 0)
             {
                 throw new InvalidMappingException("Unable to update elements. " + Table.Name + " has no update property.");

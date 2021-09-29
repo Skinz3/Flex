@@ -29,7 +29,7 @@ namespace Flex.Entities
             private set;
         }
 
-        public TableScheduler<T> Scheduler
+        public EntityScheduler<T> Scheduler
         {
             get;
             private set;
@@ -84,7 +84,7 @@ namespace Flex.Entities
             this.Database = database;
             this.Reader = new TableReader<T>(this);
             this.Writer = new TableWriter<T>(this);
-            this.Scheduler = new TableScheduler<T>(this);
+            this.Scheduler = new EntityScheduler<T>(this);
             this.Name = tableName;
             this.Build();
         }
@@ -121,6 +121,10 @@ namespace Flex.Entities
         public void Update(T entity)
         {
             Writer.Update(new[] { entity });
+        }
+        public void Update(IEnumerable<T> entities)
+        {
+            Writer.Update(entities);
         }
 
         public void Drop()

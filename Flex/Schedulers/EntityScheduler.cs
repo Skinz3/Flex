@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Flex.Schedulers
 {
-    public class TableScheduler<T> : IScheduler where T : IEntity
+    public class EntityScheduler<T> : IScheduler where T : IEntity
     {
         private Table<T> Table
         {
@@ -29,7 +29,7 @@ namespace Flex.Schedulers
             get;
             set;
         }
-        public TableScheduler(Table<T> table)
+        public EntityScheduler(Table<T> table)
         {
             this.Table = table;
             this.NewElements = new ConcurrentBag<T>();
@@ -61,16 +61,12 @@ namespace Flex.Schedulers
         {
             Table.Insert(NewElements);
 
-            foreach (var dirty in DirtyElements)
-            {
-                Table.Update(dirty);
-            }
-      
-            foreach (var element in RemovedElements)
+            Table.Update(DirtyElements);
+
+            foreach (var element in RemovedElements) // todo
             {
                 Table.Delete(element);
             }
-
 
             NewElements.Clear();
             DirtyElements.Clear();
