@@ -117,7 +117,7 @@ table.Scheduler.Apply(); // <--- Only one query is executed.
   Database mySqlDb = new MySqlDatabase("MyDatabase","localhost","root","");
   Database sqlLiteDb = new SQLiteDatabase("database.sqlite");
 
-  sqlLiteDb.Copy(mySqlDb);
+  sqlLiteDb.CopyTo(mySqlDb);
 
 ```
 
