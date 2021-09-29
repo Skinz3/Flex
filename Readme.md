@@ -11,10 +11,9 @@ Flex is a lightweight object-relational mapping (ORM) product for the Microsoft 
 ```csharp
 
   [Table("Users")]
-  public class User : IEntity // <--- Interface allows extensions methods for entities
+  public class User : IEntity 
   { 
-      [Primary]
-      [AutoIncrement]
+      [Primary(GenerationType.AutoIncrement)] 
       public int Id
       {
           get;
@@ -125,7 +124,7 @@ table.Scheduler.Apply(); // <--- Only one query is executed.
 
  | Name        | Version           |
 | ------------- |:-------------:|
-| MySql.Data      | 8.0.11 | 
+| MySql.Data      | 8.0.26 | 
 | protobuf-net | 3.0.101 |
 | System.Data.SQLite | 1.0.115 | 
 
