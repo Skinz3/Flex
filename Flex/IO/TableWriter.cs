@@ -140,8 +140,6 @@ namespace Flex.IO
             else if (Table.BlobProperties.Contains(property) || property.PropertyType.IsCollection())
             {
                 return ProtoSerializer.Serialize(value);
-                //var hex = BitConverter.ToString(buffer).Replace("-", string.Empty);
-                // return hex;
             }
             return value.ToString();
         }

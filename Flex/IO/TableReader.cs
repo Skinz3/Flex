@@ -49,7 +49,7 @@ namespace Flex.IO
                             obj[i] = ConvertProperty(reader[i], Table.Properties[i]);
                         }
 
-                        T entity = (T)Activator.CreateInstance(typeof(T));
+                        T entity = (T)Activator.CreateInstance(typeof(T)); // Compiled lambda ?
 
                         for (int i = 0; i < Table.Properties.Length; i++)
                         {
@@ -71,23 +71,9 @@ namespace Flex.IO
             }
             if (property.PropertyType.IsCollection() || Table.BlobProperties.Contains(property))
             {
-                //  var str = Encoding.ASCII.GetString((byte[])value);
-
-                //var bt = StringToByteArray(str);
-                //var result = ProtoSerializer.Deserialize(property.PropertyType, (byte[])bt);
-
-
                 return ProtoSerializer.Deserialize(property.PropertyType, (byte[])value);
             }
             return Convert.ChangeType(value, property.PropertyType, CultureInfo.InvariantCulture);
-        }
-
-        public static byte[] StringToByteArray(string hex)
-        {
-            return Enumerable.Range(0, hex.Length)
-                             .Where(x => x % 2 == 0)
-                             .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
-                             .ToArray();
         }
     }
 }
