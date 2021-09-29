@@ -63,7 +63,7 @@ namespace Flex.Schedulers
 
             Table.Update(DirtyElements);
 
-            foreach (var element in RemovedElements) // todo
+            foreach (var element in RemovedElements) // todo 
             {
                 Table.Delete(element);
             }
