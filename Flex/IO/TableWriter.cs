@@ -116,7 +116,7 @@ namespace Flex.IO
 
                     var text = string.Format("{0}", string.Join(",", sb.ToString()));
 
-                    var primary = Table.PrimaryProperty.GetValue(entity);
+                    var primary = Table.PrimaryAccessor.Get(entity);
                     command.CommandText += string.Format(SQLQueries.UPDATE, Table.Name, text, Table.PrimaryProperty.Name, primary.ToString()) + ";";
 
                     i++;
@@ -127,11 +127,18 @@ namespace Flex.IO
 
         }
 
+        public int Delete(IEnumerable<T> entities) 
+        {
+            var uids = entities.Select(x => Table.PrimaryAccessor.Get(x)).ToArray();
+            string queryContent = string.Join(",", uids);
+            return Table.Database.Provider.NonQuery(string.Format(SQLQueries.DELETE_IN, Table.Name, queryContent));
+        }
+
         private object ConvertProperty(PropertyInfo property, object value)
         {
             if (value == null)
             {
-                return null;
+                return DBNull.Value;
             }
             else if (property.PropertyType == typeof(DateTime))
             {

@@ -18,6 +18,8 @@ namespace Flex.SQL
 
         public const string DELETE = "DELETE FROM {0}";
 
+        public const string DELETE_IN = "DELETE FROM {0} WHERE id IN({1})";
+
         public const string INSERT = "INSERT INTO `{0}` ({1}) VALUES {2}";
 
         public const string UPDATE = "UPDATE `{0}` SET {1} WHERE {2} = {3}";

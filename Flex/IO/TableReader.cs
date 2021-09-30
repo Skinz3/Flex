@@ -49,7 +49,7 @@ namespace Flex.IO
                             obj[i] = ConvertProperty(reader[i], Table.Properties[i]);
                         }
 
-                        T entity = (T)Activator.CreateInstance(typeof(T)); // Compiled lambda ?
+                        T entity = (T)Table.Activator(new object[0]); 
 
                         for (int i = 0; i < Table.Properties.Length; i++)
                         {

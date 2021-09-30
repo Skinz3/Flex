@@ -35,11 +35,13 @@ namespace Flex
         }
         public Database(Assembly entitiesAssembly, ISqlProvider provider)
         {
+
             this.EntitiesAssembly = entitiesAssembly;
             this.Provider = provider;
             this.Provider.Connect();
             Build();
             CreateAllTables();
+
         }
 
         private void Build()

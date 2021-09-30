@@ -3,6 +3,7 @@ using Flex.Exceptions;
 using Flex.Expressions;
 using Flex.Extensions;
 using Flex.IO;
+using Flex.Optimizations;
 using Flex.Schedulers;
 using Flex.SQL;
 using MySql.Data.MySqlClient;
@@ -17,6 +18,8 @@ namespace Flex.Entities
 {
     public class Table<T> : ITable where T : IEntity
     {
+        private Type Type = typeof(T);
+
         public string Name
         {
             get;
@@ -35,6 +38,16 @@ namespace Flex.Entities
             private set;
         }
         internal PropertyInfo PrimaryProperty
+        {
+            get;
+            private set;
+        }
+        internal LambdaAccessor PrimaryAccessor
+        {
+            get;
+            private set;
+        }
+        internal LambdaActivator.ObjectActivator Activator
         {
             get;
             private set;
@@ -91,7 +104,7 @@ namespace Flex.Entities
 
         private void Build()
         {
-            this.Properties = typeof(T).GetProperties().Where(x => !x.HasAttribute<TransientAttribute>()).OrderBy(x => x.MetadataToken).ToArray();
+            this.Properties = Type.GetProperties().Where(x => !x.HasAttribute<TransientAttribute>()).OrderBy(x => x.MetadataToken).ToArray();
             this.UpdateProperties = Properties.Where(x => x.HasAttribute<UpdateAttribute>()).ToArray();
             this.BlobProperties = Properties.Where(x => x.HasAttribute<BlobAttribute>()).ToArray();
 
@@ -106,7 +119,19 @@ namespace Flex.Entities
 
             PrimaryAttribute = PrimaryProperty.GetCustomAttribute<PrimaryAttribute>();
 
+            PrimaryAccessor = new LambdaAccessor(PrimaryProperty);
+
             this.NotNullProperties = Properties.Where(x => x.HasAttribute<NotNullAttribute>()).ToArray();
+
+
+            var ctor = Type.GetConstructors().FirstOrDefault(x => x.GetParameters().Length == 0);
+
+            if (ctor == null)
+            {
+                throw new NotSupportedException("Entity " + Type.Name + " must own an empty constructor.");
+            }
+
+            this.Activator = LambdaActivator.GetActivator(ctor);
         }
 
         public void Insert(T entity)
@@ -132,11 +157,15 @@ namespace Flex.Entities
             Database.Provider.NonQuery(string.Format(SQLQueries.DROP, Name));
         }
 
-        public void Delete(T entity)
+        public int Delete(T entity)
         {
-            var primaryKey = PrimaryProperty.GetValue(entity);
+            var primaryKey = PrimaryAccessor.Get(entity);
             string query = string.Format(SQLQueries.DELETE, Name) + string.Format(SQLQueries.WHERE_CLAUSE, PrimaryProperty.Name + "=" + primaryKey);
-            Database.Provider.NonQuery(query);
+            return Database.Provider.NonQuery(query);
+        }
+        public int Delete(IEnumerable<T> entities)
+        {
+            return Writer.Delete(entities);
         }
         public int DeleteAll()
         {
