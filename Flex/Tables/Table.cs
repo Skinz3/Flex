@@ -1,4 +1,5 @@
-﻿using Flex.Attributes;
+﻿using Flex.Atomics;
+using Flex.Attributes;
 using Flex.Exceptions;
 using Flex.Expressions;
 using Flex.Extensions;
@@ -87,6 +88,7 @@ namespace Flex.Entities
             get;
             set;
         }
+       
         public Table(Database database, string tableName)
         {
             this.Database = database;
@@ -97,6 +99,7 @@ namespace Flex.Entities
             this.Build();
         }
 
+       
         private void Build()
         {
             this.Properties = Type.GetProperties().Where(x => !x.HasAttribute<TransientAttribute>()).OrderBy(x => x.MetadataToken).ToArray();
