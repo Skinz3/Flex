@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="Utils/logo.png" />
+  <img src="Misc/logo.png" />
 </p>
 
 # Flex 
