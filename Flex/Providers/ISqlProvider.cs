@@ -22,5 +22,6 @@ namespace Flex.Providers
         T Scalar<T>(string query);
 
         DbCommand CreateSqlCommand();
+        int NonQuery(object dELETE_WHERE);
     }
 }

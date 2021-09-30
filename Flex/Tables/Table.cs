@@ -87,11 +87,6 @@ namespace Flex.Entities
             get;
             set;
         }
-        private ulong AutoIncrementId
-        {
-            get;
-            set;
-        }
         public Table(Database database, string tableName)
         {
             this.Database = database;
@@ -122,7 +117,6 @@ namespace Flex.Entities
             PrimaryAccessor = new LambdaAccessor(PrimaryProperty);
 
             this.NotNullProperties = Properties.Where(x => x.HasAttribute<NotNullAttribute>()).ToArray();
-
 
             var ctor = Type.GetConstructors().FirstOrDefault(x => x.GetParameters().Length == 0);
 
@@ -166,6 +160,12 @@ namespace Flex.Entities
         public int Delete(IEnumerable<T> entities)
         {
             return Writer.Delete(entities);
+        }
+        public int Delete(Expression<Func<T, bool>> expression)
+        {
+            QueryBuilder builder = new QueryBuilder();
+            builder.Translate(expression);
+            return Database.Provider.NonQuery(string.Format(SQLQueries.DELETE_WHERE, Name, builder.WhereClause));
         }
         public int DeleteAll()
         {
