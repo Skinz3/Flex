@@ -68,7 +68,7 @@ namespace Flex.IO
                     }
                     else
                     {
-                        queryContent.Append("'" + value + "'");
+                        queryContent.Append("'" + MySqlHelper.EscapeString(value.ToString()) + "'");
                     }
                 }
 
@@ -142,10 +142,6 @@ namespace Flex.IO
             if (value == null)
             {
                 return DBNull.Value;
-            }
-            else if (property.PropertyType == typeof(string))
-            {
-                return MySqlHelper.EscapeString(value.ToString());
             }
             else if (property.PropertyType == typeof(DateTime))
             {
