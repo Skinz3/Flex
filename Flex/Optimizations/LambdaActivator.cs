@@ -6,6 +6,11 @@ using System.Text;
 
 namespace Flex.Optimizations
 {
+    /// <summary>
+    /// Object Activator using precompiled lambda expression.
+    /// Activator.CreateInstance: 8.74 sec
+    /// LambdaActivator:          0.104 sec
+    /// </summary>
     public class LambdaActivator
     {
         public delegate object ObjectActivator(params object[] args);
