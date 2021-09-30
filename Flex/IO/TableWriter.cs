@@ -82,7 +82,6 @@ namespace Flex.IO
             queryContent = queryContent.Remove(queryContent.Length - 1, 1);
 
             var properties = string.Join(',', Table.Properties.Select(x => x.Name));
-
             command.CommandText = string.Format(SQLQueries.INSERT, Table.Name, properties, string.Format("{0}", queryContent.ToString()));
             return command.ExecuteNonQuery();
         }
@@ -143,6 +142,10 @@ namespace Flex.IO
             if (value == null)
             {
                 return DBNull.Value;
+            }
+            else if (property.PropertyType == typeof(string))
+            {
+                return MySqlHelper.EscapeString(value.ToString());
             }
             else if (property.PropertyType == typeof(DateTime))
             {
