@@ -7,6 +7,10 @@ using System.Text;
 
 namespace Flex.Schedulers
 {
+    /// <summary>
+    /// Thread-safe SQL transaction abstraction
+    /// </summary>
+    /// <typeparam name="T">Entity type</typeparam>
     public class EntityScheduler<T> : IScheduler where T : IEntity
     {
         private Table<T> Table

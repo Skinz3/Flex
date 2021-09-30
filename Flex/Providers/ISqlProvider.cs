@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Flex.Providers
 {
+    /*
+     * Provide a SQL driver abstraction
+     */
     public interface ISqlProvider
     {
         char ParameterPrefix

@@ -32,10 +32,17 @@ namespace Flex.Providers
         {
 
         }
+        /// <summary>
+        /// Update MAX_ALLOWED_PACKET size (global)
+        /// </summary>
+        /// <param name="sizeMb">size in megabytes</param>
         public void SetMaxAllowedPacket(double sizeMb)
         {
             NonQuery(string.Format(SQLQueries.SET_MAX_ALLOWED_PACKET, (sizeMb * 1048576d).ToString()));
         }
+        /// <summary>
+        /// Return MAX_ALLOWED_PACKET size (global)
+        /// </summary>
         public double GetMaxAllowedPacket()
         {
             return Scalar<ulong>(SQLQueries.GET_MAX_ALLOWED_PACKET) / 1048576d;

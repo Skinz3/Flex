@@ -26,7 +26,6 @@ namespace Flex.IO
         {
             this.Table = table;
         }
-
         public int Insert(IEnumerable<T> entities)
         {
             if (entities.Count() == 0)
