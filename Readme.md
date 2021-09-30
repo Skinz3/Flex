@@ -43,7 +43,7 @@ Flex is a lightweight object-relational mapping (ORM) product for the Microsoft 
           set;
       }
 
-      [Transcient]  // <--- This property is ignored in SQL Schema 
+      [Transient]  // <--- This property is ignored in SQL Schema 
       public bool Connected
       {
           get;

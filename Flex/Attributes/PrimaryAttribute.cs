@@ -6,9 +6,14 @@ namespace Flex.Attributes
 {
     public class PrimaryAttribute : Attribute
     {
-        public PrimaryAttribute()
+        public GenerationType GenerationType
         {
-
+            get;
+            private set;
+        }
+        public PrimaryAttribute(GenerationType type)
+        {
+            this.GenerationType = type;
         }
     }
     public enum GenerationType // TODO

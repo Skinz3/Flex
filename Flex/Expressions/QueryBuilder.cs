@@ -6,6 +6,9 @@ using System.Text;
 
 namespace Flex.Expressions
 {
+    /*
+     * Work in progress.
+     */
     public class QueryBuilder : ExpressionVisitor
     {
         private StringBuilder sb;
