@@ -2,9 +2,10 @@
   <img src="Misc/logo.png" />
 </p>
 
-# Flex 
-
 [![NuGet latest version](https://badgen.net/nuget/v/Flex/latest)](https://www.nuget.org/packages/Flex/)
+
+
+# Flex 
 
 Flex is a lightweight object-relational mapping (ORM) product for the Microsoft .NET Core and SQL : it provides a framework for mapping an object-oriented domain model to a traditional SQL database. Written in **C# .NET Core 3.1** using active record pattern. Flex currently supports **MySQL** and **SQLite** (Postgre soon)
 
