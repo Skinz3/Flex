@@ -236,6 +236,7 @@ namespace Flex.Entities
             return Database.Provider.Scalar<long>(string.Format(SQLQueries.COUNT, Name));
         }
 
+
         public IScheduler GetScheduler()
         {
             return Scheduler;

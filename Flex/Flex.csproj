@@ -2,12 +2,27 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Description>Flex is a lightweight object-relational mapping (ORM) product for the Microsoft .NET Core and SQL : it provides a framework for mapping an object-oriented domain model to a traditional SQL database.</Description>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/Skinz3/Flex</PackageProjectUrl>
+    <PackageIcon>nuget.png</PackageIcon>
+    <PackageIconUrl />
+    <Version>0.0.2</Version>
+    <Authors>Skinz</Authors>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="Repositories\**" />
     <EmbeddedResource Remove="Repositories\**" />
     <None Remove="Repositories\**" />
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\Misc\nuget.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

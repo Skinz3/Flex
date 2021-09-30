@@ -11,7 +11,7 @@ namespace Flex.Attributes
             get;
             private set;
         }
-        public PrimaryAttribute(GenerationType type)
+        public PrimaryAttribute(GenerationType type = GenerationType.None)
         {
             this.GenerationType = type;
         }
