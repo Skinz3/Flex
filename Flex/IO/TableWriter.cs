@@ -39,19 +39,24 @@ namespace Flex.IO
 
             int id = 0;
 
-            foreach (var entity in entities)
+            foreach (var entity in entities) // Invert loops ?
             {
                 queryContent.Append("(");
 
                 string prefix = "";
 
-                foreach (var property in Table.Properties)
+                foreach (var property in Table.Properties) // Invert loops ?
                 {
                     queryContent.Append(prefix);
                     prefix = ",";
 
                     object value = ConvertProperty(property, property.GetValue(entity));
 
+                    /* 
+                     *    Blob cannot be passed has a string. 
+                     *    For some reason command.Parameters.Add() cost a lot
+                     *    of performances so we dont use it in a general case
+                     */
                     if (value is byte[])
                     {
                         queryContent.Append(string.Format(Table.Database.Provider.ParameterPrefix + "{0}{1}", property.Name, id));
@@ -126,7 +131,7 @@ namespace Flex.IO
 
         }
 
-        public int Delete(IEnumerable<T> entities) 
+        public int Delete(IEnumerable<T> entities)
         {
             var uids = entities.Select(x => Table.PrimaryAccessor.Get(x)).ToArray();
             string queryContent = string.Join(",", uids);

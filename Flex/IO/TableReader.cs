@@ -63,13 +63,13 @@ namespace Flex.IO
 
             return results;
         }
-        private object ConvertProperty(object value, PropertyInfo property) // todo, Blob, Enum, boolean? blob if its collection.
+        private object ConvertProperty(object value, PropertyInfo property) // TODO : Enum , boolean?
         {
             if (value is DBNull)
             {
                 return null;
             }
-            if (property.PropertyType.IsCollection() || Table.BlobProperties.Contains(property))
+            if (property.PropertyType.IsCollection() || Table.BlobProperties.Contains(property)) // .Contains() performances?
             {
                 return ProtoSerializer.Deserialize(property.PropertyType, (byte[])value);
             }
