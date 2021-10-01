@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Flex.Attributes
 {
-    public class BinaryAttribute : Attribute
+    public class BlobAttribute : Attribute
     {
     }
 }
