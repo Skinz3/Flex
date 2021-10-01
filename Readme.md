@@ -62,7 +62,7 @@ Flex is a lightweight object-relational mapping (ORM) product for the Microsoft 
 | **Binary**      | Indicates that the field must be serialized in binary (anything that is not a primitive type and a collection) | ✅
 | **Foreign** | Indicates that the concerned object is a foreign key of another table | ❌
 | **NotNull** | Indicates that the property cannot have the value DbNull| ✅
-| **Primary** | Indicates that the property is a primary key | ✅
+| **Primary** | Indicates that the property is a primary key. It is also possible to provide an auto-increment parameter as an attribute parameter. | ✅
 | **Transient** | Indicates that the property will be ignored by the mapping | ✅
 
 
