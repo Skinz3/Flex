@@ -1,6 +1,7 @@
 ﻿using Flex.Schedulers;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 
 namespace Flex.Entities
@@ -11,8 +12,15 @@ namespace Flex.Entities
         {
             get;
         }
+
+        PropertyInfo PrimaryProperty
+        {
+            get;
+        }
+
         IScheduler GetScheduler();
 
         void Create();
+
     }
 }

@@ -38,7 +38,7 @@ namespace Flex.Entities
             get;
             private set;
         }
-        internal PropertyInfo PrimaryProperty
+        public PropertyInfo PrimaryProperty
         {
             get;
             private set;
@@ -78,6 +78,11 @@ namespace Flex.Entities
             get;
             private set;
         }
+        public PropertyInfo[] ForeignProperties
+        {
+            get;
+            private set;
+        }
         private TableReader<T> Reader
         {
             get;
@@ -88,7 +93,7 @@ namespace Flex.Entities
             get;
             set;
         }
-       
+
         public Table(Database database, string tableName)
         {
             this.Database = database;
@@ -99,7 +104,7 @@ namespace Flex.Entities
             this.Build();
         }
 
-       
+
         private void Build()
         {
             this.Properties = Type.GetProperties().Where(x => !x.HasAttribute<TransientAttribute>()).OrderBy(x => x.MetadataToken).ToArray();
@@ -120,6 +125,8 @@ namespace Flex.Entities
             PrimaryAccessor = new LambdaAccessor(PrimaryProperty);
 
             this.NotNullProperties = Properties.Where(x => x.HasAttribute<NotNullAttribute>()).ToArray();
+
+            this.ForeignProperties = Properties.Where(x => x.HasAttribute<ForeignAttribute>()).ToArray();
 
             var ctor = Type.GetConstructors().FirstOrDefault(x => x.GetParameters().Length == 0);
 
@@ -203,7 +210,7 @@ namespace Flex.Entities
                 PropertyInfo property = Properties[i];
                 sb.Append(property.Name);
                 sb.Append(" ");
-                sb.Append(TypeMapping.GetSQLType(property));
+                sb.Append(TypeMapping.GetSQLType(Database, property));
 
                 if (NotNullProperties.Contains(property))
                 {
@@ -227,6 +234,15 @@ namespace Flex.Entities
             {
                 sb.Append(string.Format(SQLQueries.PRIMARY_KEY, PrimaryProperty.Name));
             }
+
+            foreach (var foreignKey in ForeignProperties)
+            {
+                var table = Database.GetTable(foreignKey.PropertyType);
+                sb.Append(',');
+                sb.Append(string.Format("FOREIGN KEY({0}) REFERENCES {1}({2})", foreignKey.Name, table.Name, table.PrimaryProperty.Name));
+            }
+
+            
 
             Database.Provider.NonQuery(string.Format(SQLQueries.CREATE_TABLE, Name, sb.ToString()));
         }

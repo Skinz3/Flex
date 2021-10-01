@@ -1,4 +1,6 @@
 ﻿using Flex.Attributes;
+using Flex.Entities;
+using Flex.Exceptions;
 using Flex.Extensions;
 using System;
 using System.Collections.Generic;
@@ -19,7 +21,7 @@ namespace Flex.SQL
             { typeof(DateTime), SQLTypes.DATETIME },
 
         };
-        public static string GetSQLType(PropertyInfo property)
+        public static string GetSQLType(Database database, PropertyInfo property)
         {
             if (property.HasAttribute<BlobAttribute>() || property.PropertyType.IsCollection())
             {
@@ -30,10 +32,28 @@ namespace Flex.SQL
             {
                 return Mapping[property.PropertyType];
             }
-            else
+            else if (property.HasAttribute<ForeignAttribute>())
             {
-                throw new NotImplementedException("Type : " + property.PropertyType.Name + " is not handled.");
+                ITable table = database.GetTable(property.PropertyType);
+
+                if (table == null)
+                {
+                    throw new InvalidMappingException("Invalid forein key"); // todo
+                }
+
+                else
+                {
+                    if (table.PrimaryProperty == property)
+                    {
+                        throw new InvalidMappingException("Invalid forein key"); // todo recursive error
+                    }
+
+                    return GetSQLType(database, table.PrimaryProperty);
+                }
+
             }
+
+            throw new NotImplementedException("Type : " + property.PropertyType.Name + " is not handled. Add [Blob] attribute to the property if its not a primitive type.");
         }
     }
 }

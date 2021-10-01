@@ -86,9 +86,18 @@ namespace Flex
             Tables.Remove(typeof(T));
         }
 
+        public ITable GetTable(Type type)
+        {
+            if (Tables.ContainsKey(type))
+            {
+                return Tables[type];
+            }
+
+            return null;
+        }
         public Table<T> GetTable<T>() where T : IEntity
         {
-            return (Table<T>)Tables[typeof(T)];
+            return (Table<T>)GetTable(typeof(T));
         }
         public ITable GetTable(string name)
         {
