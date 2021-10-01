@@ -40,7 +40,7 @@ Flex is a lightweight object-relational mapping (ORM) product for the Microsoft 
           set;
       }
 
-      [Blob] // <--- Fast serialization using Google Protobuf 
+      [Binary] // <--- Fast serialization using Google Protobuf 
       public Certificate Certificate 
       {
           get;
@@ -59,11 +59,11 @@ Flex is a lightweight object-relational mapping (ORM) product for the Microsoft 
 
   | Name        | Description           | Status
 | ------------- |:-------------:|:-------------:|
-| Blob      | Indicates that the field must be serialized in binary (anything that is not a primitive type and a collection) | Done
-| Foreign | Indicates that the concerned object is a foreign key of another table | Done
-| NotNull | Indicates that the property cannot have the value DbNull| Done
-| Primary | Indicates that the property is a primary key | Done
-| Transient | Indicates that the property will be ignored by the mapping | Done
+| **Binary**      | Indicates that the field must be serialized in binary (anything that is not a primitive type and a collection) | ✅
+| **Foreign** | Indicates that the concerned object is a foreign key of another table | ❌
+| **NotNull** | Indicates that the property cannot have the value DbNull| ✅
+| **Primary** | Indicates that the property is a primary key | ✅
+| **Transient** | Indicates that the property will be ignored by the mapping | ✅
 
 
 
