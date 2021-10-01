@@ -55,6 +55,17 @@ Flex is a lightweight object-relational mapping (ORM) product for the Microsoft 
       }
   }
 ```
+ * Mapping attributes
+
+  | Name        | Description           | Status
+| ------------- |:-------------:|:-------------:|
+| Blob      | Indicates that the field must be serialized in binary (anything that is not a primitive type and a collection) | Done
+| Foreign | Indicates that the concerned object is a foreign key of another table | Done
+| NotNull | Indicates that the property cannot have the value DbNull| Done
+| Primary | Indicates that the property is a primary key | Done
+| Transient | Indicates that the property will be ignored by the mapping | Done
+
+
 
  ## Interopability
 
